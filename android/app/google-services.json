@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "377473380051",
+    "project_id": "pik-a-food-3430d",
+    "storage_bucket": "pik-a-food-3430d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377473380051:android:85fb4352f1f1a1f1036e26",
+        "android_client_info": {
+          "package_name": "com.thesis.pikafoodcustomers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377473380051-hmein7vtkc83q9aqlk3gc23jf68vnpse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGYQ24DCGG0sNoxhQuOR7Pe5oBkL84HNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377473380051-hmein7vtkc83q9aqlk3gc23jf68vnpse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377473380051:android:e746643caf4e099b036e26",
+        "android_client_info": {
+          "package_name": "com.thesis.pikafoodsellers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377473380051-hmein7vtkc83q9aqlk3gc23jf68vnpse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGYQ24DCGG0sNoxhQuOR7Pe5oBkL84HNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377473380051-hmein7vtkc83q9aqlk3gc23jf68vnpse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
