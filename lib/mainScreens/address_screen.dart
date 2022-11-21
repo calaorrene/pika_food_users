@@ -14,8 +14,9 @@ class AddressScreen extends StatefulWidget
 {
   final double? totalAmount;
   final String? sellerUID;
+  final String? sellerName;
 
-  AddressScreen({this.totalAmount, this.sellerUID});
+  AddressScreen({this.totalAmount, this.sellerUID, this.sellerName});
 
 
   @override
@@ -85,6 +86,7 @@ class _AddressScreenState extends State<AddressScreen>
                                 addressID: snapshot.data!.docs[index].id,
                                 totalAmount: widget.totalAmount,
                                 sellerUID: widget.sellerUID,
+                                sellerName: widget.sellerName,
                                 model: Address.fromJson(
                                   snapshot.data!.docs[index].data()! as Map<String, dynamic>
                                 ),

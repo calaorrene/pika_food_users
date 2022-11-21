@@ -24,10 +24,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(sellerUID: widget.model!.sellerUID),
+      appBar: MyAppBar(sellerUID: widget.model!.sellerUID, sellerName: widget.model!.sellerName,
+      ),
+
       body: CustomScrollView(
         slivers: [
-          SliverPersistentHeader(pinned: true, delegate: TextWidgetHeader(title: "Items of " + widget.model!.menuTitle.toString())),
+          SliverPersistentHeader(pinned: true, delegate: TextWidgetHeader(title: widget.model!.menuTitle.toString())),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")
@@ -44,9 +46,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 child: Center(child: circularProgress(),),
               )
                   : SliverStaggeredGrid.countBuilder(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
+                crossAxisCount: 3,
+                mainAxisSpacing: 1,
+                crossAxisSpacing: 1,
                 staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                 itemBuilder: (context, index)
                 {

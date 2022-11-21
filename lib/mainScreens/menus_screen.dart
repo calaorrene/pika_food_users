@@ -13,7 +13,7 @@ import 'package:pika_food_cutomer/widgets/text_widget_header.dart';
 class MenusScreen extends StatefulWidget
 {
   final Sellers? model;
-  MenusScreen({this.model});
+  MenusScreen({this.model,});
 
   @override
   _MenusScreenState createState() => _MenusScreenState();
@@ -21,9 +21,13 @@ class MenusScreen extends StatefulWidget
 
 
 
-class _MenusScreenState extends State<MenusScreen> {
+class _MenusScreenState extends State<MenusScreen>
+    with TickerProviderStateMixin
+{
   @override
   Widget build(BuildContext context) {
+
+    TabController _tabController = TabController(length: 3, vsync: this);
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -40,16 +44,16 @@ class _MenusScreenState extends State<MenusScreen> {
             Navigator.push(context, MaterialPageRoute(builder: (c)=> const MySplashScreen()));
           },
         ),
-        title: const Text(
-          "",
-          style: TextStyle(fontSize: 45, fontFamily: "Signatra"),
+        title: Text(
+          widget.model!.sellerName.toString() + " Menus",
+          style: TextStyle(fontSize: 20, fontFamily: "Signatra"),
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
       ),
       body: CustomScrollView(
         slivers: [
-          SliverPersistentHeader(pinned: true, delegate: TextWidgetHeader(title: widget.model!.sellerName.toString() + " Menus")),
+          // SliverPersistentHeader(pinned: true, delegate: TextWidgetHeader(title: widget.model!.sellerName.toString() + " Menus")),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")

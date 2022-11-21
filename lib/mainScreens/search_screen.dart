@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pika_food_cutomer/designs/sellers_search_design.dart';
+import 'package:pika_food_cutomer/models/items.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
+import 'package:pika_food_cutomer/widgets/items_design.dart';
 import 'package:pika_food_cutomer/widgets/sellers_design.dart';
 
 
@@ -9,9 +12,6 @@ class SearchScreen extends StatefulWidget
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
-
-
-
 
 class _SearchScreenState extends State<SearchScreen>
 {
@@ -33,16 +33,7 @@ class _SearchScreenState extends State<SearchScreen>
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.cyan,
-                  Colors.amber,
-                ],
-                begin:  FractionalOffset(0.0, 0.0),
-                end:  FractionalOffset(1.0, 0.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp,
-              )
+              color: Colors.orangeAccent
           ),
         ),
         title: TextField(
@@ -54,6 +45,7 @@ class _SearchScreenState extends State<SearchScreen>
             //init search
             initSearchingRestaurant(textEntered);
           },
+
           decoration: InputDecoration(
             hintText: "Search Restaurant here...",
             hintStyle: const TextStyle(color: Colors.white54),
@@ -73,6 +65,7 @@ class _SearchScreenState extends State<SearchScreen>
           ),
         ),
       ),
+
       body: FutureBuilder<QuerySnapshot>(
         future: restaurantsDocumentsList,
         builder: (context, snapshot)
@@ -86,7 +79,7 @@ class _SearchScreenState extends State<SearchScreen>
                       snapshot.data!.docs[index].data()! as Map<String, dynamic>
                     );
 
-                    return SellersDesignWidget(
+                    return SellersSearchDesign(
                       model: model,
                       context: context,
                     );

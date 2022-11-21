@@ -26,37 +26,32 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen>
   Widget build(BuildContext context)
   {
     return Scaffold(
-      appBar: MyAppBar(sellerUID: widget.model!.sellerUID),
+      appBar: MyAppBar(sellerUID: widget.model!.sellerUID, sellerName: widget.model!.sellerName,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.network(widget.model!.thumbnailUrl.toString()),
+          Image.network(widget.model!.thumbnailUrl.toString(),
+            fit:BoxFit.fill,
+            height: 200,
+            width: 200,),
 
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: NumberInputPrefabbed.roundedButtons(
+            padding: const EdgeInsets.all(10),
+            child: NumberInputPrefabbed.squaredButtons(
               controller: counterTextEditingController,
               incDecBgColor: Colors.amber,
               min: 1,
               max: widget.model!.quantity!,
               initialValue: 1,
-              buttonArrangement: ButtonArrangement.incRightDecLeft,
             ),
           ),
+
 
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              widget.model!.name.toString() + " x " + widget.model!.quantity.toString(),
+              widget.model!.name.toString() + " ₱ " + widget.model!.price.toString(),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "₱ " + widget.model!.price.toString() ,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
             ),
           ),
 

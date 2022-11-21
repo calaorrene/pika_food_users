@@ -3,13 +3,18 @@ import 'package:pika_food_cutomer/assistantMethods/cart_Item_counter.dart';
 import 'package:pika_food_cutomer/mainScreens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../models/sellers.dart';
+
 
 class MyAppBar extends StatefulWidget with PreferredSizeWidget
 {
   final PreferredSizeWidget? bottom;
   final String? sellerUID;
+  final String? sellerName;
+  final Sellers? model;
+  MyAppBar({this.bottom, this.sellerUID, this.sellerName, this.model});
 
-  MyAppBar({this.bottom, this.sellerUID});
+
 
   @override
   _MyAppBarState createState() => _MyAppBarState();
@@ -35,10 +40,7 @@ class _MyAppBarState extends State<MyAppBar>
           Navigator.pop(context);
         },
       ),
-      title: const Text(
-        "",
-        style: TextStyle(fontSize: 45, fontFamily: "Signatra"),
-      ),
+      title: Text(""),
       centerTitle: true,
       automaticallyImplyLeading: true,
       actions: [
@@ -49,7 +51,7 @@ class _MyAppBarState extends State<MyAppBar>
               onPressed: ()
               {
                 //send user to cart screen
-                Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.sellerUID)));
+                Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.sellerUID, sellerName: widget.sellerName,)));
               },
             ),
             Positioned(

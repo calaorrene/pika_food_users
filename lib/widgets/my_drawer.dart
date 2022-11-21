@@ -6,6 +6,7 @@ import 'package:pika_food_cutomer/mainScreens/address_screen.dart';
 import 'package:pika_food_cutomer/mainScreens/history_screen.dart';
 import 'package:pika_food_cutomer/mainScreens/home_screen.dart';
 import 'package:pika_food_cutomer/mainScreens/my_orders_screen.dart';
+import 'package:pika_food_cutomer/mainScreens/search_screen.dart';
 
 class MyDrawer extends StatelessWidget
 {
@@ -91,22 +92,6 @@ class MyDrawer extends StatelessWidget
                   thickness: 2,
                 ),
                 ListTile(
-                  leading: const Icon(Icons.check_box, color: Colors.black,),
-                  title: const Text(
-                    "Pick Up",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  onTap: ()
-                  {
-                    Navigator.push(context, MaterialPageRoute(builder: (c)=> PickUpScreen()));
-                  },
-                ),
-                const Divider(
-                  height: 10,
-                  color: Colors.grey,
-                  thickness: 2,
-                ),
-                ListTile(
                   leading: const Icon(Icons.access_time, color: Colors.black,),
                   title: const Text(
                     "History & Feedback",
@@ -130,7 +115,7 @@ class MyDrawer extends StatelessWidget
                   ),
                   onTap: ()
                   {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (c)=> SearchScreen()));
                   },
                 ),
                 const Divider(

@@ -4,6 +4,7 @@ class Menus
 {
   String? menuID;
   String? sellerUID;
+  String? sellerName;
   String? menuTitle;
   String? menuInfo;
   Timestamp? publishedDate;
@@ -13,6 +14,7 @@ class Menus
   Menus({
     this.menuID,
     this.sellerUID,
+    this.sellerName,
     this.menuTitle,
     this.menuInfo,
     this.publishedDate,
@@ -24,6 +26,7 @@ class Menus
   {
     menuID = json["menuID"];
     sellerUID = json['sellerUID'];
+    sellerName = json['sellerName'];
     menuTitle = json['menuTitle'];
     menuInfo = json['menuInfo'];
     publishedDate = json['publishedDate'];
@@ -36,6 +39,7 @@ class Menus
     final Map<String, dynamic> data = Map<String, dynamic>();
     data["menuID"] = menuID;
     data['sellerUID'] = sellerUID;
+    data['sellerName'] = sellerName;
     data['menuTitle'] = menuTitle;
     data['menuInfo'] = menuInfo;
     data['publishedDate'] = publishedDate;

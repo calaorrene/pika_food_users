@@ -19,6 +19,7 @@ class AddressDesign extends StatefulWidget
   final String? addressID;
   final double? totalAmount;
   final String? sellerUID;
+  final String? sellerName;
 
   AddressDesign({
     this.model,
@@ -27,6 +28,7 @@ class AddressDesign extends StatefulWidget
     this.addressID,
     this.totalAmount,
     this.sellerUID,
+    this.sellerName
   });
 
   @override
@@ -50,6 +52,7 @@ class _AddressDesignState extends State<AddressDesign>
       "orderTime": orderId,
       "isSuccess": true,
       "sellerUID": widget.sellerUID,
+      "sellerName": widget.sellerName,
       "status": "preparing",
       "orderId": orderId,
     });
@@ -63,6 +66,7 @@ class _AddressDesignState extends State<AddressDesign>
       "orderTime": orderId,
       "isSuccess": true,
       "sellerUID": widget.sellerUID,
+      "sellerName": widget.sellerName,
       "status": "preparing",
       "orderId": orderId,
     }).whenComplete((){

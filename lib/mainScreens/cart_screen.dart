@@ -16,8 +16,9 @@ import 'package:provider/provider.dart';
 class CartScreen extends StatefulWidget
 {
   final String? sellerUID;
+  final String? sellerName;
 
-  CartScreen({this.sellerUID});
+  CartScreen({this.sellerUID, this.sellerName});
 
   @override
   _CartScreenState createState() => _CartScreenState();
@@ -139,6 +140,7 @@ class _CartScreenState extends State<CartScreen>
                         builder: (c)=> AddressScreen(
                           totalAmount: totalAmount.toDouble(),
                           sellerUID: widget.sellerUID,
+                          sellerName: widget.sellerName,
                         ),
                     ),
                 );

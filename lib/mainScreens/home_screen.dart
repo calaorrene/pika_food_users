@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen>
               return !snapshot.hasData
                   ? SliverToBoxAdapter(child: Center(child: circularProgress(),),)
                   : SliverStaggeredGrid.countBuilder(
-                      crossAxisCount: 1,
+                      crossAxisCount: 2,
                       staggeredTileBuilder: (c) => StaggeredTile.fit(1),
                       itemBuilder: (context, index)
                       {

@@ -24,44 +24,84 @@ class _SellersDesignWidgetState extends State<SellersDesignWidget> {
       {
         Navigator.push(context, MaterialPageRoute(builder: (c)=> MenusScreen(model: widget.model)));
       },
+
       splashColor: Colors.amber,
+
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Container(
-          height: 280,
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          height: 200,
           width: MediaQuery.of(context).size.width,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Divider(
-                height: 4,
-                thickness: 3,
-                color: Colors.grey[300],
-              ),
-              Image.network(
+              ClipRRect(
+                borderRadius: BorderRadius.only(topRight: Radius.circular(10.0), topLeft: Radius.circular(10.0)), //add border radius
+                child: Image.network(
                   widget.model!.sellerAvatarUrl!,
-                  height: 220.0,
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(height: 1.0,),
-              Text(
-                widget.model!.sellerName!,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontFamily: "Train",
+                  height: 150.0,
+                  width: 200.0,
+                  fit: BoxFit.cover,
                 ),
               ),
-              Text(
-                widget.model!.sellerEmail!,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                ),
-              ),
-              Divider(
-                height: 4,
-                thickness: 3,
-                color: Colors.grey[300],
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            widget.model!.sellerName.toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontFamily: "Acme",
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            widget.model!.sellerEmail.toString(),
+                            style: TextStyle(fontSize: 10.0, color: Colors.white60),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(Icons.star, size: 14, color: Colors.yellow,),
+                          ),
+                          TextSpan(
+                            text: "4.6",
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
             ],
           ),

@@ -16,9 +16,15 @@ class MenusDesignWidget extends StatefulWidget
 
 
 
-class _MenusDesignWidgetState extends State<MenusDesignWidget> {
+class _MenusDesignWidgetState extends State<MenusDesignWidget>
+    with TickerProviderStateMixin
+
+{
   @override
   Widget build(BuildContext context) {
+
+    TabController _tabController = TabController(length: 3, vsync: this);
+
     return InkWell(
       onTap: ()
       {
@@ -26,42 +32,58 @@ class _MenusDesignWidgetState extends State<MenusDesignWidget> {
       },
       splashColor: Colors.amber,
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
         child: Container(
-          height: 280,
+          height: 100,
           width: MediaQuery.of(context).size.width,
-          child: Column(
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Row(
             children: [
-              Divider(
-                height: 4,
-                thickness: 3,
-                color: Colors.grey[300],
-              ),
-              Image.network(
-                widget.model!.thumbnailUrl!,
-                height: 220.0,
-                fit: BoxFit.cover,
-              ),
-              const SizedBox(height: 1.0,),
-              Text(
-                widget.model!.menuTitle!,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontFamily: "Train",
+              ClipRRect(
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0), topLeft: Radius.circular(10.0)), //add border radius
+                child: Image.network(
+                  widget.model!.thumbnailUrl!,
+                  height: 200.0,
+                  width: 100.0,
+                  fit: BoxFit.cover,
                 ),
               ),
-              Text(
-                widget.model!.menuInfo!,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
+              const SizedBox(width: 10.0,),
+
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10.0,),
+                    Text(
+                      widget.model!.menuTitle!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: "Train",
+                      ),
+                    ),
+                    const SizedBox(height: 5.0,),
+                    Text(
+                      widget.model!.menuInfo!,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Divider(
-                height: 4,
-                thickness: 3,
-                color: Colors.grey[300],
               ),
             ],
           ),
