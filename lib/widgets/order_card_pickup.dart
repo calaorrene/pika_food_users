@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pika_food_cutomer/mainScreens/order_details_pickup.dart';
 import 'package:pika_food_cutomer/mainScreens/order_details_screen.dart';
 import 'package:pika_food_cutomer/models/items.dart';
 
@@ -22,7 +23,7 @@ class OrderCardPickup extends StatelessWidget
     return InkWell(
       onTap: ()
       {
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsScreen(orderID: orderID)));
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsPickup(orderID: orderID)));
       },
       child: Container(
         decoration: BoxDecoration(

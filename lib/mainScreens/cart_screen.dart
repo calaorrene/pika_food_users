@@ -119,7 +119,7 @@ class _CartScreenState extends State<CartScreen>
               {
                 clearCartNow(context);
 
-                Navigator.push(context, MaterialPageRoute(builder: (c)=> const MySplashScreen()));
+                Navigator.pop(context);
 
                 Fluttertoast.showToast(msg: "Cart has been cleared.");
               },

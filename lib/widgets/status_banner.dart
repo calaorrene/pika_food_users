@@ -40,12 +40,6 @@ class StatusBanner extends StatelessWidget
           const SizedBox(
             width: 20,
           ),
-          Text(
-            orderStatus == "ended"
-                ? "Parcel Delivered $message"
-                : "Order Placed $message",
-            style: const TextStyle(color: Colors.white),
-          ),
           const SizedBox(
             width: 5,
           ),

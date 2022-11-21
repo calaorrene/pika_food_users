@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pika_food_cutomer/assistantMethods/cart_Item_counter.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:provider/provider.dart';
-
-
 
 separateOrderItemIDs(orderIDs)
 {
@@ -161,3 +160,19 @@ clearCartNow(context)
     Provider.of<CartItemCounter>(context, listen: false).displayCartListItemsNumber();
   });
 }
+
+deleteItem(context)
+{
+  sharedPreferences!.setStringList("userCart", ['garbageValue']);
+  List<String>? emptyList = sharedPreferences!.getStringList("userCart");
+
+  FirebaseFirestore.instance
+      .collection("users")
+      .doc(firebaseAuth.currentUser!.uid)
+      .update({"userCart": emptyList}).then((value)
+  {
+    sharedPreferences!.setStringList("userCart", emptyList!);
+    Provider.of<CartItemCounter>(context, listen: false).displayCartListItemsNumber();
+  });
+}
+

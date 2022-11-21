@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/models/items.dart';
+
+import '../global/global.dart';
 
 class CartItemDesign extends StatefulWidget
 {
@@ -23,22 +29,39 @@ class _CartItemDesignState extends State<CartItemDesign> {
     return InkWell(
       splashColor: Colors.cyan,
       child: Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(10.0),
         child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 2,
+                offset: Offset(0, 3), // changes position of shadow
+              ),
+            ],
+          ),
           height: 100,
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: [
-
+              ClipRRect(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)), //add border radius
+                child: Image.network(
+                  widget.model!.thumbnailUrl!,
+                  height: 100.0,
+                  width: 100.0,
+                  fit: BoxFit.cover,
+                ),
+              ),
               //image
-              Image.network(widget.model!.thumbnailUrl!, width: 140, height: 120,),
 
-              const SizedBox(width: 6,),
+              const SizedBox(width: 10,),
 
-              //title
-              //quantity number
-              //price
-              Column(
+              Expanded(
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -105,7 +128,26 @@ class _CartItemDesignState extends State<CartItemDesign> {
                   ),
                 ],
               ),
+              ),
 
+              Container(
+
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
+                  color: Colors.black12,
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.delete_forever_outlined, size: 50, color: Colors.grey,),
+                  onPressed: () async
+                  {
+                    deleteItem(context);
+
+                    Fluttertoast.showToast(msg: "Deleted.");
+                  },
+                ),
+              ),
             ],
           ),
         ),

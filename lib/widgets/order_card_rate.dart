@@ -118,13 +118,42 @@ Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuanti
               ),
             ],
           ),
-
         ),
-        RatingBar.builder(
-          minRating: 1,
-          itemSize: 40,
-          itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
-          onRatingUpdate: (rating) {},
+
+        GestureDetector(
+          onTap: () {
+            showDialog(context: context, builder: (context) => AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              content: Container(
+                color: Colors.white,
+                height: 250,
+                width: 0,
+                child: Column(
+                  children: [
+                    RatingBar.builder(
+                      minRating: 1,
+                      itemSize: 40,
+                      itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                      onRatingUpdate: (rating) {},
+                    ),
+                  ],
+                ),
+              ),
+            ));
+          },
+          child: Container(
+            alignment: Alignment.center,
+            width: 100,
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset('images/rating.png'),
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Colors.teal,
+            ),
+          ),
         ),
       ],
     ),

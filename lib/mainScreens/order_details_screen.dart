@@ -36,7 +36,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           .collection("orders")
           .doc(widget.orderID)
           .update({
-        "status": "pickuped",
+        "status": "torate",
       });
     }).then((value) {
       FirebaseFirestore.instance
@@ -45,7 +45,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           .collection("orders")
           .doc(widget.orderID)
           .update({
-        "status": "pickuped",
+        "status": "torate",
       });
     });
     Navigator.pop(context);
@@ -84,8 +84,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Order Id = " + widget.orderID!,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.center,
                             child: Text(
                               "₱  " + dataMap["totalAmount"].toString(),
                               style: const TextStyle(
@@ -93,13 +101,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Order Id = " + widget.orderID!,
-                            style: const TextStyle(fontSize: 16),
                           ),
                         ),
                         Padding(

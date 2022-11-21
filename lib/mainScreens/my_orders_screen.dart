@@ -106,7 +106,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen>
                           .collection("users")
                           .doc(sharedPreferences!.getString("uid"))
                           .collection("orders")
-                          .where("status", isEqualTo: "preparing")
+                          .where("status", isEqualTo: "pickup")
                           .orderBy("orderTime", descending: true)
                           .snapshots(),
                       builder: (c, snapshot)
@@ -151,7 +151,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen>
                           .collection("users")
                           .doc(sharedPreferences!.getString("uid"))
                           .collection("orders")
-                          .where("status", isEqualTo: "preparing")
+                          .where("status", isEqualTo: "torate")
                           .orderBy("orderTime", descending: true)
                           .snapshots(),
                       builder: (c, snapshot)
