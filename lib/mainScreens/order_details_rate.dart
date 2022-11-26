@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
@@ -10,19 +11,32 @@ import 'package:pika_food_cutomer/widgets/shipment_address_design.dart';
 import 'package:pika_food_cutomer/widgets/status_banner.dart';
 
 
-class OrderDetailsPickup extends StatefulWidget
+class OrderDetailsRate extends StatefulWidget
 {
   final String? orderID;
+  final String? sellerUID;
 
-  OrderDetailsPickup({this.orderID});
+
+  OrderDetailsRate({this.orderID, this.sellerUID});
 
   @override
-  _OrderDetailsPickupState createState() => _OrderDetailsPickupState();
+  _OrderDetailsRateState createState() => _OrderDetailsRateState();
 }
 
-class _OrderDetailsPickupState extends State<OrderDetailsPickup>
+class _OrderDetailsRateState extends State<OrderDetailsRate>
 {
+  String orderTotalAmount = "";
   String orderStatus = "";
+  double _rating = 0;
+
+  getPreviousEarnings(){
+    FirebaseFirestore.instance
+        .collection("sellers")
+        .doc(widget.sellerUID).get().then((snap)
+    {
+      previousEarnings = snap.data()!["earnings"].toString();
+    });
+  }
 
   getOrderInfo()
   {
@@ -36,7 +50,7 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
           .collection("orders")
           .doc(widget.orderID)
           .update({
-        "status": "torate"
+        "status": "done",
       });
     }).then((value) {
       FirebaseFirestore.instance
@@ -45,7 +59,13 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
           .collection("orders")
           .doc(widget.orderID)
           .update({
-        "status": "torate",
+        "status": "done",
+        }).then((value) {
+        FirebaseFirestore.instance
+            .collection("sellers")
+            .doc(widget.sellerUID).update({
+          "earnings": (double.parse(orderTotalAmount) + (double.parse(previousEarnings))).toString()
+        });
       });
     });
     Navigator.pop(context);
@@ -82,7 +102,6 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
                   const SizedBox(
                     height: 10.0,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -90,7 +109,13 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
-
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Seller ID = " + dataMap["sellerUID"],
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
@@ -104,7 +129,6 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
                       ),
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -114,9 +138,6 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
                       style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ),
-
-                  // Image.asset("images/check.png", scale: 2,),
-
                   const Divider(thickness: 4,),
                   FutureBuilder<DocumentSnapshot>(
                     future: FirebaseFirestore.instance
@@ -138,37 +159,56 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
                     },
                   ),
 
-                  orderStatus == "preparing"
-                      ? Container(child: Text("Preparing..."))
-                      : Padding(
+                  Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Center(
                       child: InkWell(
                         onTap: ()
                         {
                           getOrderInfo();
+                          getPreviousEarnings();
                         },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.redAccent,
-                                  Colors.orangeAccent,
-                                ],
-                                begin:  FractionalOffset(0.0, 0.0),
-                                end:  FractionalOffset(1.0, 0.0),
-                                stops: [0.0, 1.0],
-                                tileMode: TileMode.clamp,
-                              )
-                          ),
-                          width: MediaQuery.of(context).size.width - 40,
-                          height: 50,
-                          child: const Center(
-                            child: Text(
-                              "Pick Up",
-                              style: TextStyle(color: Colors.white, fontSize: 15.0),
+                        child: Column(
+                          children: [
+                            Text("Rate: $_rating"),
+                            RatingBar.builder(
+                              minRating: 1,
+                              itemSize: 40,
+                              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                              onRatingUpdate: (rating) => setState(() {
+                                this._rating = rating ;
+                              }),
                             ),
-                          ),
+                            SizedBox(height: 10,),
+
+                            _rating == 0
+                                ? Container(
+                              decoration: const BoxDecoration(
+                                  color: Colors.grey
+                              ),
+                              width: MediaQuery.of(context).size.width - 40,
+                              height: 50,
+                              child: const Center(
+                                child: Text(
+                                  "Rate",
+                                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                                ),
+                              ),
+                            )
+                                : Container(
+                              decoration: const BoxDecoration(
+                                  color: Colors.orangeAccent
+                              ),
+                              width: MediaQuery.of(context).size.width - 40,
+                              height: 50,
+                              child: const Center(
+                                child: Text(
+                                  "Rate",
+                                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),

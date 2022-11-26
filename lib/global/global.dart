@@ -3,3 +3,5 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? sharedPreferences;
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+String previousEarnings = "";

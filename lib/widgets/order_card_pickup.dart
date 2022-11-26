@@ -123,7 +123,6 @@ Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuanti
             ],
           ),
         ),
-        Image.asset("images/check.png", width: 100,),
       ],
     ),
   );

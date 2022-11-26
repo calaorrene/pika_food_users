@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
+import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
 import 'package:pika_food_cutomer/widgets/my_drawer.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';

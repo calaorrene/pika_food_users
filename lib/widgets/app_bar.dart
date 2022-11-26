@@ -51,7 +51,7 @@ class _MyAppBarState extends State<MyAppBar>
               onPressed: ()
               {
                 //send user to cart screen
-                Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.sellerUID, sellerName: widget.sellerName,)));
+                Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.sellerUID,)));
               },
             ),
             Positioned(

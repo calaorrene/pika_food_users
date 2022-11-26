@@ -14,8 +14,6 @@ class Items
   int? quantity;
   int? price;
 
-  int? totalprice;
-
   Items({
     this.sellerName,
     this.menuID,
@@ -28,8 +26,6 @@ class Items
     this.status,
     this.quantity,
     this.price,
-
-    this.totalprice
   });
 
   Items.fromJson(Map<String, dynamic> json)
@@ -45,8 +41,6 @@ class Items
     status = json['status'];
     quantity = json['quantity'];
     price = json['price'];
-
-    totalprice = json['totalAmount'];
   }
 
   Map<String, dynamic> toJson() {final Map<String, dynamic> data = Map<String, dynamic>();
@@ -61,8 +55,6 @@ class Items
     data['status'] = status;
     data['quantity'] = quantity;
     data['price'] = price;
-
-    data['totalAmount'] = totalprice;
 
     return data;
   }

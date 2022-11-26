@@ -25,12 +25,13 @@ class StatusBanner extends StatelessWidget
       padding: EdgeInsets.only(top: 40),
       height: 80,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(width: 10,),
           GestureDetector(
             onTap: ()
             {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+              Navigator.pop(context);
             },
             child: const Icon(
               Icons.arrow_back,
@@ -42,17 +43,6 @@ class StatusBanner extends StatelessWidget
           ),
           const SizedBox(
             width: 5,
-          ),
-          CircleAvatar(
-            radius: 8,
-            backgroundColor: Colors.grey,
-            child: Center(
-              child: Icon(
-                iconData,
-                color: Colors.white,
-                size: 14,
-              ),
-            ),
           ),
         ],
       ),

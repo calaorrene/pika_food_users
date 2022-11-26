@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/models/address.dart';
-import 'package:pika_food_cutomer/widgets/order_card.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/shipment_address_design.dart';
 import 'package:pika_food_cutomer/widgets/status_banner.dart';
@@ -13,6 +11,7 @@ import 'package:pika_food_cutomer/widgets/status_banner.dart';
 class OrderDetailsScreen extends StatefulWidget
 {
   final String? orderID;
+
 
   OrderDetailsScreen({this.orderID});
 
@@ -113,11 +112,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                           ),
                         ),
                         const Divider(thickness: 4,),
-                        orderStatus == "preparing"
-                            ? Image.asset("images/preparing.gif")
-                            : Image.asset("images/check.png", scale: 2,),
-
-                        const Divider(thickness: 4,),
                         FutureBuilder<DocumentSnapshot>(
                           future: FirebaseFirestore.instance
                               .collection("users")
@@ -165,7 +159,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                 height: 50,
                                 child: const Center(
                                   child: Text(
-                                    "Pick Up",
+                                    "Rate",
                                     style: TextStyle(color: Colors.white, fontSize: 15.0),
                                   ),
                                 ),

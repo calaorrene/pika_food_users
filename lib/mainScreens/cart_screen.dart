@@ -18,14 +18,12 @@ class CartScreen extends StatefulWidget
   final String? sellerUID;
   final String? sellerName;
 
+
   CartScreen({this.sellerUID, this.sellerName});
 
   @override
   _CartScreenState createState() => _CartScreenState();
 }
-
-
-
 
 class _CartScreenState extends State<CartScreen>
 {
@@ -137,12 +135,12 @@ class _CartScreenState extends State<CartScreen>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (c)=> AddressScreen(
+                      builder: (c)=> AddressScreen(
                           totalAmount: totalAmount.toDouble(),
                           sellerUID: widget.sellerUID,
                           sellerName: widget.sellerName,
-                        ),
-                    ),
+                      ),
+                    )
                 );
               },
             ),

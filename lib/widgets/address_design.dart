@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pika_food_cutomer/assistantMethods/address_changer.dart';
 import 'package:pika_food_cutomer/mainScreens/home_screen.dart';
-import 'package:pika_food_cutomer/mainScreens/placed_order_screen.dart';
 import 'package:pika_food_cutomer/maps/maps.dart';
 import 'package:pika_food_cutomer/models/address.dart';
 import 'package:provider/provider.dart';
@@ -34,8 +33,6 @@ class AddressDesign extends StatefulWidget
   @override
   _AddressDesignState createState() => _AddressDesignState();
 }
-
-
 
 class _AddressDesignState extends State<AddressDesign>
 {
@@ -109,7 +106,6 @@ class _AddressDesignState extends State<AddressDesign>
         color: Colors.cyan.withOpacity(0.4),
         child: Column(
           children: [
-
             //address info
             Row(
               children: [
@@ -218,18 +214,6 @@ class _AddressDesignState extends State<AddressDesign>
                       onPressed: ()
                       {
                         addOrderDetails();
-
-                        // Old Place Order
-                        /* Navigator.push(
-                            context, MaterialPageRoute(
-                            builder: (c)=> PlacedOrderScreen(
-                              addressID: widget.addressID,
-                              totalAmount: widget.totalAmount,
-                              sellerUID: widget.sellerUID,
-                            )
-                          )
-                        ); */
-
                       },
                   )
                 : Container(),

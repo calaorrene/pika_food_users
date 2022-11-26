@@ -4,17 +4,21 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pika_food_cutomer/mainScreens/order_details_screen.dart';
 import 'package:pika_food_cutomer/models/items.dart';
 
+import '../mainScreens/order_details_rate.dart';
+
 class OrderCardRate extends StatelessWidget
 {
   final int? itemCount;
   final List<DocumentSnapshot>? data;
   final String? orderID;
+  final String? sellerUID;
   final List<String>? seperateQuantitiesList;
 
   OrderCardRate({
     this.itemCount,
     this.data,
     this.orderID,
+    this.sellerUID,
     this.seperateQuantitiesList,
   });
 
@@ -23,7 +27,7 @@ class OrderCardRate extends StatelessWidget
     return InkWell(
       onTap: ()
       {
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsScreen(orderID: orderID)));
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsRate(orderID: orderID, sellerUID: sellerUID)));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -147,11 +151,6 @@ Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuanti
             height: 100,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset('images/rating.png'),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Colors.teal,
             ),
           ),
         ),
