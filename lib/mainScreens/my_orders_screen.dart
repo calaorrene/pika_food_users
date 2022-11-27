@@ -41,7 +41,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen>
                 indicatorColor: Colors.orangeAccent,
                 tabs: [
                   Tab(text: "Preparing",),
-                  Tab(text: "Pick up",),
+                  Tab(text: "For Pickup",),
                   Tab(text: "Rate",)
                 ],
               ),

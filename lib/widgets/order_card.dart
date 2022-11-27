@@ -99,8 +99,6 @@ class OrderCard extends StatelessWidget
                         itemBuilder: (context, index)
                         {
                           Items model = Items.fromJson(data![index].data()! as Map<String, dynamic>);
-
-
                           return Align(
                             heightFactor: 0.3,
                             alignment: Alignment.topCenter,
