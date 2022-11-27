@@ -18,8 +18,10 @@ class CartScreen extends StatefulWidget
   final String? sellerUID;
   final String? sellerName;
 
+  Items? model;
+  BuildContext? context;
 
-  CartScreen({this.sellerUID, this.sellerName});
+  CartScreen({this.model, this.sellerUID, this.sellerName, this.context});
 
   @override
   _CartScreenState createState() => _CartScreenState();
@@ -132,6 +134,7 @@ class _CartScreenState extends State<CartScreen>
               icon: const Icon(Icons.navigate_next),
               onPressed: ()
               {
+                //debugPrint("Cart Screen TestID: " +  widget.model!.sellerUID.toString());
                 Navigator.push(
                     context,
                     MaterialPageRoute(

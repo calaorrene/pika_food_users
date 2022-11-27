@@ -23,6 +23,7 @@ class _SellersDesignWidgetState extends State<SellersDesignWidget> {
       onTap: ()
       {
         Navigator.push(context, MaterialPageRoute(builder: (c)=> MenusScreen(model: widget.model)));
+        debugPrint("TestID: " +  widget.model!.sellerUID.toString());
       },
 
       splashColor: Colors.amber,

@@ -37,41 +37,51 @@ class AddressDesign extends StatefulWidget
 class _AddressDesignState extends State<AddressDesign>
 {
   String orderId = DateTime.now().millisecondsSinceEpoch.toString();
+  String _sellerName = "";
 
   addOrderDetails()
   {
-    writeOrderDetailsForUser({
-      "addressID": widget.addressID,
-      "totalAmount": widget.totalAmount,
-      "orderBy": sharedPreferences!.getString("uid"),
-      "productIDs": sharedPreferences!.getStringList("userCart"),
-      "paymentDetails": "Cash on Delivery",
-      "orderTime": orderId,
-      "isSuccess": true,
-      "sellerUID": widget.sellerUID,
-      "sellerName": widget.sellerName,
-      "status": "preparing",
-      "orderId": orderId,
-    });
+    FirebaseFirestore.instance
+        .collection("sellers")
+        .doc(widget.sellerUID).get().then((snap)
+    {
 
-    writeOrderDetailsForSeller({
-      "addressID": widget.addressID,
-      "totalAmount": widget.totalAmount,
-      "orderBy": sharedPreferences!.getString("uid"),
-      "productIDs": sharedPreferences!.getStringList("userCart"),
-      "paymentDetails": "Cash on Delivery",
-      "orderTime": orderId,
-      "isSuccess": true,
-      "sellerUID": widget.sellerUID,
-      "sellerName": widget.sellerName,
-      "status": "preparing",
-      "orderId": orderId,
-    }).whenComplete((){
-      clearCartNow(context);
-      setState(() {
-        orderId="";
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-        Fluttertoast.showToast(msg: "Congratulations, Order has been placed successfully.");
+      _sellerName = snap.data()!["sellerName"].toString();
+
+    }).then((value) {
+      writeOrderDetailsForUser({
+        "addressID": widget.addressID,
+        "totalAmount": widget.totalAmount,
+        "orderBy": sharedPreferences!.getString("uid"),
+        "productIDs": sharedPreferences!.getStringList("userCart"),
+        "paymentDetails": "Cash on Delivery",
+        "orderTime": orderId,
+        "isSuccess": true,
+        "sellerUID": widget.sellerUID,
+        "sellerName": _sellerName,
+        "status": "preparing",
+        "orderId": orderId,
+      });
+
+      writeOrderDetailsForSeller({
+        "addressID": widget.addressID,
+        "totalAmount": widget.totalAmount,
+        "orderBy": sharedPreferences!.getString("uid"),
+        "productIDs": sharedPreferences!.getStringList("userCart"),
+        "paymentDetails": "Cash on Delivery",
+        "orderTime": orderId,
+        "isSuccess": true,
+        "sellerUID": widget.sellerUID,
+        "sellerName": _sellerName,
+        "status": "preparing",
+        "orderId": orderId,
+      }).whenComplete((){
+        clearCartNow(context);
+        setState(() {
+          orderId="";
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+          Fluttertoast.showToast(msg: "Congratulations, Order has been placed successfully.");
+        });
       });
     });
   }
@@ -199,7 +209,6 @@ class _AddressDesignState extends State<AddressDesign>
               onPressed: ()
               {
                 MapsUtils.openMapWithPosition(widget.model!.lat!, widget.model!.lng!);
-
                 //MapsUtils.openMapWithAddress(widget.model!.fullAddress!);
               },
             ),
@@ -214,6 +223,8 @@ class _AddressDesignState extends State<AddressDesign>
                       onPressed: ()
                       {
                         addOrderDetails();
+                        debugPrint("Cart Screen SellerName: " +  _sellerName.toString());
+                        debugPrint("Cart Screen SellerUID: " +  widget.sellerUID.toString());
                       },
                   )
                 : Container(),

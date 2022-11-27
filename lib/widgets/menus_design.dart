@@ -29,6 +29,7 @@ class _MenusDesignWidgetState extends State<MenusDesignWidget>
       onTap: ()
       {
         Navigator.push(context, MaterialPageRoute(builder: (c)=> ItemsScreen(model: widget.model)));
+        debugPrint("TestID: " +  widget.model!.sellerUID.toString());
       },
       splashColor: Colors.amber,
       child: Padding(

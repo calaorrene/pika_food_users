@@ -11,6 +11,7 @@ class OrderCard extends StatelessWidget
   final List<DocumentSnapshot>? data;
   final String? orderID;
   final List<String>? seperateQuantitiesList;
+  late String? sellerName;
   late String? totalAmount;
 
   OrderCard({
@@ -18,6 +19,7 @@ class OrderCard extends StatelessWidget
     this.data,
     this.orderID,
     this.seperateQuantitiesList,
+    this.sellerName,
     this.totalAmount,
   });
 
@@ -43,46 +45,67 @@ class OrderCard extends StatelessWidget
           {
             dataMap = snapshot.data!.data()! as Map<String, dynamic>;
             totalAmount = dataMap["totalAmount"].toString();
+            sellerName = dataMap["sellerName"].toString();
           }
           return snapshot.hasData
               ? Container(
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 10,),
                 Text(
-                  "",
+                  sellerName.toString(),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
                     fontFamily: "Acme",
                   ),
                 ),
+                SizedBox(height: 5,),
                 Text(
-                  orderID.toString(),
+                  "Total Amount: ₱" + totalAmount.toString(),
                   style: const TextStyle(
+                    fontWeight: FontWeight.w500,
                     color: Colors.black,
                     fontSize: 16,
                     fontFamily: "Acme",
                   ),
                 ),
+                SizedBox(height: 5,),
+                Text(
+                  "More Info >>",
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
+                    fontFamily: "Acme",
+                  ),
+                ),
+
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.black12
+                      color: Colors.white
                   ),
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(20),
-                  height: itemCount! * 125,
+                  padding: const EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(5),
+                  height: itemCount! * 50,
                   child: Stack(
                     children: [
                       Padding(padding: EdgeInsets.all(10)),
                       ListView.builder(
                         itemCount: itemCount,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index)
                         {
                           Items model = Items.fromJson(data![index].data()! as Map<String, dynamic>);
-                          return placedOrderDesignWidget(model, context, seperateQuantitiesList![index]);
+
+
+                          return Align(
+                            heightFactor: 0.3,
+                            alignment: Alignment.topCenter,
+                            child: placedOrderDesignWidget(model, context, seperateQuantitiesList![index]),
+                          );
                         },
                       ),
                     ],
@@ -102,51 +125,66 @@ Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuanti
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 110,
-    child: Row(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10.0), //add border radius
-          child: Image.network(model.thumbnailUrl!, width: 90, height: 90, fit: BoxFit.cover,),
-        ),
-        const SizedBox(width: 10.0,),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text(
-                      model.name! + " x " + seperateQuantitiesList,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: "Acme",
+
+    child: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 3,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.0), //add border radius
+            child: Image.network(model.thumbnailUrl!, width: 90, height: 90, fit: BoxFit.cover,),
+          ),
+          const SizedBox(width: 10.0,),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        model.name! + " x " + seperateQuantitiesList,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontFamily: "Acme",
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                ],
-              ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                  ],
+                ),
 
-              const SizedBox(
-                height: 5,
-              ),
+                const SizedBox(
+                  height: 5,
+                ),
 
-              Text(
-                "₱ " + model.price.toString(),
-                style: TextStyle(fontSize: 16.0, color: Colors.blue),
-              ),
-            ],
+                Text(
+                  "₱ " + model.price.toString(),
+                  style: TextStyle(fontSize: 16.0, color: Colors.blue),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

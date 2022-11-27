@@ -81,6 +81,7 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
                           :
                       //2.add to cart
                       addItemToCart(widget.model!.itemID, context, itemCounter);
+                      debugPrint("TestID2: " +  widget.model!.sellerUID.toString());
                     },
                     child: Container(
                       decoration: const BoxDecoration(
