@@ -2,12 +2,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
 import 'package:pika_food_cutomer/widgets/my_drawer.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/sellers_design.dart';
+
+import '../splashScreen/splash_screen.dart';
 
 
 
@@ -53,11 +56,28 @@ class _HomeScreenState extends State<HomeScreen>
     "slider/27.jpg",
   ];
 
+  restrictBlockeduserFromUsingApp() async
+  {
+    await FirebaseFirestore.instance.collection("users")
+        .doc(firebaseAuth.currentUser!.uid)
+        .get().then((snapshot)
+    {
+      if(snapshot.data()!["status"] != "approved")
+      {
+        Fluttertoast.showToast(msg: "you have been Blocked");
+
+        firebaseAuth.signOut();
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> MySplashScreen()));
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
     clearCartNow(context);
+    restrictBlockeduserFromUsingApp();
   }
 
   @override
