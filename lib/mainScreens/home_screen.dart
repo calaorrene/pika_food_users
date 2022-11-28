@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen>
     {
       if(snapshot.data()!["status"] != "approved")
       {
-        Fluttertoast.showToast(msg: "you have been Blocked");
+        Fluttertoast.showToast(msg: "Account has been restrict \n\n Email:customerservice@gmail.com for further assistance");
 
         firebaseAuth.signOut();
         Navigator.push(context, MaterialPageRoute(builder: (c)=> MySplashScreen()));

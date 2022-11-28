@@ -93,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen>
         .then((snapshot) async {
           if(snapshot.exists)
           {
-
             if (snapshot.data()!["status"] == "approved")
             {
               await sharedPreferences!.setString("uid", currentUser.uid);
@@ -111,18 +110,8 @@ class _LoginScreenState extends State<LoginScreen>
               {
                 firebaseAuth.signOut();
                 Navigator.pop(context);
-                Fluttertoast.showToast(msg: "Admin has blocked your account");
+                Fluttertoast.showToast(msg: "Account has been restrict \n\n Email:customerservice@gmail.com for further assistance");
               }
-            await sharedPreferences!.setString("uid", currentUser.uid);
-            await sharedPreferences!.setString("email", snapshot.data()!["email"]);
-            await sharedPreferences!.setString("name", snapshot.data()!["name"]);
-            await sharedPreferences!.setString("photoUrl", snapshot.data()!["photoUrl"]);
-
-            List<String> userCartList = snapshot.data()!["userCart"].cast<String>();
-            await sharedPreferences!.setStringList("userCart", userCartList);
-
-            Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (c)=> const HomeScreen()));
           }
           else
           {
