@@ -5,3 +5,5 @@ SharedPreferences? sharedPreferences;
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 String previousEarnings = "";
+
+String previousQuantity = "";

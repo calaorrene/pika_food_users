@@ -6,11 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
+import 'package:pika_food_cutomer/splashScreen/splash_screen.dart';
 import 'package:pika_food_cutomer/widgets/my_drawer.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/sellers_design.dart';
-
-import '../splashScreen/splash_screen.dart';
 
 
 
@@ -20,8 +19,6 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
-
-
 
 class _HomeScreenState extends State<HomeScreen>
 {

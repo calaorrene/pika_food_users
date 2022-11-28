@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
@@ -10,11 +11,13 @@ import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/shipment_address_design.dart';
 import 'package:pika_food_cutomer/widgets/status_banner.dart';
 
+import 'home_screen.dart';
+
 
 class OrderDetailsRate extends StatefulWidget
 {
   final String? orderID;
-  final String? sellerUID;
+  late String? sellerUID;
 
 
   OrderDetailsRate({this.orderID, this.sellerUID});
@@ -25,21 +28,42 @@ class OrderDetailsRate extends StatefulWidget
 
 class _OrderDetailsRateState extends State<OrderDetailsRate>
 {
+  String ratingID = DateTime.now().millisecondsSinceEpoch.toString();
   String orderTotalAmount = "";
   String orderStatus = "";
   double _rating = 0;
 
-  getPreviousEarnings(){
+  getOrderTotalAmount() {
     FirebaseFirestore.instance
-        .collection("sellers")
-        .doc(widget.sellerUID).get().then((snap)
-    {
-      previousEarnings = snap.data()!["earnings"].toString();
+        .collection("orders")
+        .doc(widget.orderID)
+        .get()
+        .then((snap) {
+      orderTotalAmount = snap.data()!["totalAmount"].toString();
+      widget.sellerUID = snap.data()!["sellerUID"].toString();
+
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("sellers")
+          .doc(widget.sellerUID)
+          .get()
+          .then((snap)
+      {
+        previousEarnings = snap.data()!["earnings"].toString();
+
+      }).then((value) {
+        FirebaseFirestore.instance
+            .collection("sellers")
+            .doc(widget.sellerUID)
+            .update(
+            {
+              "earnings" : (double.parse(orderTotalAmount) + (double.parse(previousEarnings))).toString(),
+            });
+      });
     });
   }
 
-  getOrderInfo()
-  {
+  getOrderInfo() {
     FirebaseFirestore.instance
         .collection("orders")
         .doc(widget.orderID).get().then((DocumentSnapshot)
@@ -60,14 +84,9 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
           .doc(widget.orderID)
           .update({
         "status": "done",
-        }).then((value) {
-        FirebaseFirestore.instance
-            .collection("sellers")
-            .doc(widget.sellerUID).update({
-          "earnings": (double.parse(orderTotalAmount) + (double.parse(previousEarnings))).toString()
         });
-      });
     });
+
     Navigator.pop(context);
   }
 
@@ -165,8 +184,9 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                       child: InkWell(
                         onTap: ()
                         {
-                          getOrderInfo();
-                          getPreviousEarnings();
+
+                          //getOrderTotalAmount();
+                          //getOrderInfo();
                         },
                         child: Column(
                           children: [
@@ -176,9 +196,25 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                               itemSize: 40,
                               itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
                               onRatingUpdate: (rating) => setState(() {
-                                this._rating = rating ;
+
+                                if (rating <= 1){
+                                  this._rating = 1;
+                                }
+                                else if (rating <= 2){
+                                  this._rating = 2;
+                                }
+                                else if (rating <= 3){
+                                  this._rating = 3;
+                                }
+                                else if (rating <= 4){
+                                  this._rating = 4;
+                                }
+                                else if (rating <= 5){
+                                  this._rating = 5;
+                                }
                               }),
                             ),
+
                             SizedBox(height: 10,),
 
                             _rating == 0

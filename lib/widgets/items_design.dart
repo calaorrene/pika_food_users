@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:number_inc_dec/number_inc_dec.dart';
@@ -21,10 +22,29 @@ class ItemsDesignWidget extends StatefulWidget
 }
 
 
-
 class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
 {
   TextEditingController counterTextEditingController = TextEditingController();
+
+  int _previousQuantity = 0;
+  int _newQuantity = 0;
+  String _numericUpDown = "";
+
+  getQuantity(){
+    FirebaseFirestore.instance
+        .collection("items")
+        .doc(widget.model!.itemID).get().then((DocumentSnapshot)
+    {
+      _previousQuantity = DocumentSnapshot.data()!["quantity"];
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("items")
+          .doc(widget.model!.itemID)
+          .update({
+        "quantity": _newQuantity,
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +100,19 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
                           ? Fluttertoast.showToast(msg: "Item is already in Cart.")
                           :
                       //2.add to cart
+
                       addItemToCart(widget.model!.itemID, context, itemCounter);
-                      debugPrint("TestID2: " +  widget.model!.sellerUID.toString());
+
+                      _newQuantity = widget.model!.quantity!.toInt() - int.parse(counterTextEditingController.text);
+
+                      FirebaseFirestore.instance
+                          .collection("sellers").doc(widget.model!.sellerUID).collection("menus").doc(widget.model!.menuID).collection("items").doc(widget.model!.itemID)
+                          .update({
+                        "quantity": _newQuantity,
+                      });
+
+                      debugPrint("Quantity: " +  _newQuantity.toString());
+
                     },
                     child: Container(
                       decoration: const BoxDecoration(

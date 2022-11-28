@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
@@ -13,8 +14,9 @@ import 'package:pika_food_cutomer/widgets/status_banner.dart';
 class OrderDetailsPickup extends StatefulWidget
 {
   final String? orderID;
+  late String? sellerUID;
 
-  OrderDetailsPickup({this.orderID});
+  OrderDetailsPickup({this.orderID, this.sellerUID});
 
   @override
   _OrderDetailsPickupState createState() => _OrderDetailsPickupState();
@@ -22,6 +24,8 @@ class OrderDetailsPickup extends StatefulWidget
 
 class _OrderDetailsPickupState extends State<OrderDetailsPickup>
 {
+  String ratingID = DateTime.now().millisecondsSinceEpoch.toString();
+
   String orderStatus = "";
 
   getOrderInfo()
@@ -49,6 +53,64 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
       });
     });
     Navigator.pop(context);
+  }
+
+  addRating()
+  {
+    FirebaseFirestore.instance
+        .collection("orders")
+        .doc(widget.orderID)
+        .get()
+        .then((snap) {
+
+      widget.sellerUID = snap.data()!["sellerUID"].toString();
+
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("sellers")
+          .doc(widget.sellerUID)
+          .get()
+          .then((snap) {
+
+      }).then((value) {
+        FirebaseFirestore.instance
+            .collection("sellers")
+            .doc(widget.sellerUID).get().then((snap)
+        {
+          debugPrint("Seller ID: " + widget.sellerUID.toString());
+
+        }).then((value) {
+
+          writeRating({
+            "ratingID": ratingID,
+            "sellerUID": widget.sellerUID,
+            "orderBy": sharedPreferences!.getString("uid"),
+            "productIDs": sharedPreferences!.getStringList("userCart"),
+            "paymentDetails": "Cash on Delivery",
+            "ratingTime": ratingID,
+            "1_oneStar": "",
+            "2_twoStar": "",
+            "3_threeStar": "",
+            "4_fourStar": "",
+            "5_fiveStar": "",
+            "rating": "",
+          }).whenComplete((){
+            setState(() {
+              ratingID="";
+              Fluttertoast.showToast(msg: "Congratulations, Order has been placed successfully.");
+            });
+          });
+        });
+      });
+    });
+  }
+
+  Future writeRating(Map<String, dynamic> data) async
+  {
+    await FirebaseFirestore.instance
+        .collection("rating")
+        .doc(ratingID)
+        .set(data);
   }
 
   @override
@@ -147,6 +209,7 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
                         onTap: ()
                         {
                           getOrderInfo();
+                          addRating();
                         },
                         child: Container(
                           decoration: const BoxDecoration(
