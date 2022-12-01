@@ -8,4 +8,6 @@ String previousEarnings = "";
 
 String previousRating = "";
 
+String previousOverallRating = "";
+
 String previousQuantity = "";
