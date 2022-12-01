@@ -82,12 +82,11 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
         }).then((value) {
 
           writeRating({
-            "ratingID": ratingID,
             "sellerUID": widget.sellerUID,
             "orderBy": sharedPreferences!.getString("uid"),
             "productIDs": sharedPreferences!.getStringList("userCart"),
             "paymentDetails": "Cash on Delivery",
-            "ratingTime": ratingID,
+            "rateTime": ratingID,
             "1_oneStar": "",
             "2_twoStar": "",
             "3_threeStar": "",
@@ -109,7 +108,7 @@ class _OrderDetailsPickupState extends State<OrderDetailsPickup>
   {
     await FirebaseFirestore.instance
         .collection("rating")
-        .doc(ratingID)
+        .doc(widget.sellerUID)
         .set(data);
   }
 

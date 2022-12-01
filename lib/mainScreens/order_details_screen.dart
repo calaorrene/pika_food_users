@@ -11,9 +11,9 @@ import 'package:pika_food_cutomer/widgets/status_banner.dart';
 class OrderDetailsScreen extends StatefulWidget
 {
   final String? orderID;
+  final String? sellerUID;
 
-
-  OrderDetailsScreen({this.orderID});
+  OrderDetailsScreen({this.orderID, this.sellerUID});
 
   @override
   _OrderDetailsScreenState createState() => _OrderDetailsScreenState();

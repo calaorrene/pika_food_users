@@ -28,6 +28,7 @@ class OrderCardRate extends StatelessWidget
       onTap: ()
       {
         Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsRate(orderID: orderID, sellerUID: sellerUID)));
+        debugPrint("Test: " + sellerUID.toString());
       },
       child: Container(
         decoration: BoxDecoration(

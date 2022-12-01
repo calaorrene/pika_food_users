@@ -10,6 +10,7 @@ class OrderCard extends StatelessWidget
   final int? itemCount;
   final List<DocumentSnapshot>? data;
   final String? orderID;
+  final String? sellerUID;
   final List<String>? seperateQuantitiesList;
   late String? sellerName;
   late String? totalAmount;
@@ -18,6 +19,7 @@ class OrderCard extends StatelessWidget
     this.itemCount,
     this.data,
     this.orderID,
+    this.sellerUID,
     this.seperateQuantitiesList,
     this.sellerName,
     this.totalAmount,
@@ -29,7 +31,8 @@ class OrderCard extends StatelessWidget
     return InkWell(
       onTap: ()
       {
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsScreen(orderID: orderID)));
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsScreen(orderID: orderID, sellerUID: sellerUID)));
+        debugPrint("Test: " + sellerUID.toString());
       },
       child: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance

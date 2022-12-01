@@ -6,4 +6,6 @@ FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 String previousEarnings = "";
 
+String previousRating = "";
+
 String previousQuantity = "";

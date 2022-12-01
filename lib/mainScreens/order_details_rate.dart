@@ -32,6 +32,8 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
   String orderTotalAmount = "";
   String orderStatus = "";
   double _rating = 0;
+  var shouldAbsorb = true;
+  String _ratingID = "";
 
   getOrderTotalAmount() {
     FirebaseFirestore.instance
@@ -90,12 +92,48 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
     Navigator.pop(context);
   }
 
+  getRating() {
+    FirebaseFirestore.instance
+        .collection("orders")
+        .doc(widget.orderID)
+        .get()
+        .then((snap) {
+
+      widget.sellerUID = snap.data()!["sellerUID"].toString();
+
+      if (_rating <= 1 ) {
+        previousRating = snap.data()!["1_oneStar"].toString();
+      }
+      else if (_rating <= 2){
+        previousRating = snap.data()!["2_twoStar"].toString();
+      }
+      else if (_rating <= 3){
+        previousRating = snap.data()!["3_threeStar"].toString();
+      }
+      else if (_rating <= 4){
+        previousRating = snap.data()!["4_fourStar"].toString();
+      }
+      else if (_rating <= 5){
+        previousRating = snap.data()!["5_fiveStar"].toString();
+      }
+
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("rating")
+          .doc(widget.sellerUID)
+          .update({ "1_oneStar": _rating + 1,
+      });
+      debugPrint("Test " + _rating.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
     return Scaffold(
       body: SingleChildScrollView(
-        child: FutureBuilder<DocumentSnapshot>(
+        child:
+        FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
               .collection("users")
               .doc(sharedPreferences!.getString("uid"))
@@ -124,7 +162,14 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Order Id = " + widget.orderID!,
+                      "Rating ID = " + widget.orderID!,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Order ID = " + widget.orderID!,
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
@@ -178,73 +223,61 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                     },
                   ),
 
+                  Text("Rate: $_rating"),
+
+                  RatingBar.builder(
+                    minRating: 1,
+                    itemSize: 40,
+                    itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                    onRatingUpdate: (rating) => setState(() {
+
+                      if (rating <= 1){
+                        shouldAbsorb = false;
+                        this._rating = 1;
+                      }
+
+                      else if (rating <= 2){
+                        this._rating = 2;
+                      }
+                      else if (rating <= 3){
+                        this._rating = 3;
+                      }
+                      else if (rating <= 4){
+                        this._rating = 4;
+                      }
+                      else if (rating <= 5){
+                        this._rating = 5;
+                      }
+
+                    }),
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Center(
                       child: InkWell(
-                        onTap: ()
-                        {
+                        child: AbsorbPointer(
+                          absorbing: shouldAbsorb,
+                          child: GestureDetector(
+                            onTap: ()
+                            {
+                              //getOrderTotalAmount();
+                              //getOrderInfo()
 
-                          //getOrderTotalAmount();
-                          //getOrderInfo();
-                        },
-                        child: Column(
-                          children: [
-                            Text("Rate: $_rating"),
-                            RatingBar.builder(
-                              minRating: 1,
-                              itemSize: 40,
-                              itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (rating) => setState(() {
-
-                                if (rating <= 1){
-                                  this._rating = 1;
-                                }
-                                else if (rating <= 2){
-                                  this._rating = 2;
-                                }
-                                else if (rating <= 3){
-                                  this._rating = 3;
-                                }
-                                else if (rating <= 4){
-                                  this._rating = 4;
-                                }
-                                else if (rating <= 5){
-                                  this._rating = 5;
-                                }
-                              }),
+                              getRating();
+                            },
+                            child: Container(
+                              color: (_rating == 0) ? Colors.grey : Colors.orangeAccent,
+                              width: MediaQuery.of(context).size.width - 40,
+                              height: 50,
+                              child: const Center(
+                                child: Text(
+                                  "Rate",
+                                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                                ),
+                              ),
                             ),
-
-                            SizedBox(height: 10,),
-
-                            _rating == 0
-                                ? Container(
-                              decoration: const BoxDecoration(
-                                  color: Colors.grey
-                              ),
-                              width: MediaQuery.of(context).size.width - 40,
-                              height: 50,
-                              child: const Center(
-                                child: Text(
-                                  "Rate",
-                                  style: TextStyle(color: Colors.white, fontSize: 15.0),
-                                ),
-                              ),
-                            )
-                                : Container(
-                              decoration: const BoxDecoration(
-                                  color: Colors.orangeAccent
-                              ),
-                              width: MediaQuery.of(context).size.width - 40,
-                              height: 50,
-                              child: const Center(
-                                child: Text(
-                                  "Rate",
-                                  style: TextStyle(color: Colors.white, fontSize: 15.0),
-                                ),
-                              ),
-                            )
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -255,7 +288,6 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                 : Center(child: circularProgress(),);
           },
         ),
-
       ),
     );
   }
