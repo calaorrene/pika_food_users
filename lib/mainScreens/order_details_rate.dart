@@ -162,13 +162,6 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Rating ID = " + widget.orderID!,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
                       "Order ID = " + widget.orderID!,
                       style: const TextStyle(fontSize: 16),
                     ),
@@ -235,20 +228,18 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                         shouldAbsorb = false;
                         this._rating = 1;
                       }
-
                       else if (rating <= 2){
-                        this._rating = 2;
+                        this._rating = 1;
                       }
                       else if (rating <= 3){
-                        this._rating = 3;
+                        this._rating = 1;
                       }
                       else if (rating <= 4){
-                        this._rating = 4;
+                        this._rating = 1;
                       }
                       else if (rating <= 5){
-                        this._rating = 5;
+                        this._rating = 1;
                       }
-
                     }),
                   ),
 
