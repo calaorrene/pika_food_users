@@ -82,7 +82,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
           .collection("orders")
           .doc(widget.orderID)
           .update({
-        "status": "done",
+        "status": "done" ,
         });
     });
 
