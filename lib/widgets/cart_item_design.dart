@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:number_inc_dec/number_inc_dec.dart';
 import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/models/items.dart';
 
@@ -24,6 +25,9 @@ class CartItemDesign extends StatefulWidget
 }
 
 class _CartItemDesignState extends State<CartItemDesign> {
+
+  TextEditingController counterTextEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -75,29 +79,7 @@ class _CartItemDesignState extends State<CartItemDesign> {
                     ),
                   ),
                   const SizedBox(
-                    height: 1,
-                  ),
-
-                  //quantity number // x 7
-                  Row(
-                    children: [
-                      const Text(
-                        "x ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontFamily: "Acme",
-                        ),
-                      ),
-                      Text(
-                        widget.quanNumber.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontFamily: "Acme",
-                        ),
-                      ),
-                    ],
+                    height: 5,
                   ),
 
                   //price
@@ -126,12 +108,43 @@ class _CartItemDesignState extends State<CartItemDesign> {
                       ),
                     ],
                   ),
+
+                  //quantity number // x 7
+                  Row(
+                    children: [
+                      Text(
+                        "Quantity:",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15,
+                          fontFamily: "Acme",
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        height: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: NumberInputPrefabbed.squaredButtons(
+                            buttonArrangement: ButtonArrangement.incRightDecLeft,
+                            controller: counterTextEditingController,
+                            incDecBgColor: Colors.white,
+                            incIcon: Icons.add,
+                            incIconSize: 20,
+                            decIconSize: 20,
+                            decIcon: Icons.remove,
+                            min: 1,
+                            max: widget.model!.quantity!,
+                            initialValue: int.parse(widget.quanNumber.toString()),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               ),
-
               Container(
-
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
@@ -142,7 +155,7 @@ class _CartItemDesignState extends State<CartItemDesign> {
                   icon: const Icon(Icons.delete_forever_outlined, size: 50, color: Colors.grey,),
                   onPressed: () async
                   {
-                    deleteItem(context);
+                    //deleteItem(context);
 
                     Fluttertoast.showToast(msg: "Deleted.");
                   },

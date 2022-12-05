@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:pika_food_cutomer/mainScreens/order_details_screen.dart';
 import 'package:pika_food_cutomer/models/items.dart';
 
 import '../mainScreens/order_details_rate.dart';
@@ -11,7 +10,7 @@ class OrderCardRate extends StatelessWidget
   final int? itemCount;
   final List<DocumentSnapshot>? data;
   final String? orderID;
-  final String? sellerUID;
+  late String? sellerUID;
   final List<String>? seperateQuantitiesList;
 
   OrderCardRate({
@@ -27,8 +26,18 @@ class OrderCardRate extends StatelessWidget
     return InkWell(
       onTap: ()
       {
-        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsRate(orderID: orderID, sellerUID: sellerUID)));
-        debugPrint("Test: " + sellerUID.toString());
+        FirebaseFirestore.instance
+            .collection("orders")
+            .doc(orderID)
+            .get()
+            .then((snap) {
+
+          this.sellerUID = snap.data()!["sellerUID"].toString();
+
+        }).then((value) {
+          Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsRate(orderID: orderID, sellerUID: sellerUID)));
+          debugPrint("Test: " + this.sellerUID.toString());
+        });
       },
       child: Container(
         decoration: BoxDecoration(

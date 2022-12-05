@@ -12,7 +12,7 @@ class Items
   String? thumbnailUrl;
   String? status;
   int? quantity;
-  int? price;
+  double? price;
 
   Items({
     this.sellerName,

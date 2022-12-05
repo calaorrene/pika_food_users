@@ -1,24 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/models/address.dart';
-import 'package:pika_food_cutomer/widgets/order_card.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/shipment_address_design.dart';
 import 'package:pika_food_cutomer/widgets/status_banner.dart';
-
-import 'home_screen.dart';
 
 
 class OrderDetailsRate extends StatefulWidget
 {
   final String? orderID;
   late String? sellerUID;
-
 
   OrderDetailsRate({this.orderID, this.sellerUID});
 
@@ -34,7 +28,6 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
   double _rating = 0;
   double _totalRating = 0;
   var shouldAbsorb = true;
-  String _ratingID = "";
 
   getOrderTotalAmount() {
     FirebaseFirestore.instance
@@ -95,138 +88,116 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
 
   getRating() {
     FirebaseFirestore.instance
-        .collection("ratings")
-        .doc(widget.orderID)
+        .collection("sellers")
+        .doc(widget.sellerUID)
         .get()
-        .then((snap) {
-
+        .then((snap)
+    {
       previousRating = snap.data()!["1_oneStar"].toString();
-      previousOverallRating = snap.data()!["rating"].toString();
-
-    }).then((value) {
-      if (_rating <= 1){
+    }).then((value)
+    {
+      if (_rating <= 1) {
         FirebaseFirestore.instance
-            .collection("rating")
-            .doc(widget.orderID)
-            .update({ "1_oneStar" : int.parse(previousRating.toString()) + 1
-        });
-        debugPrint(widget.orderID.toString());
+            .collection("sellers")
+            .doc(widget.sellerUID)
+            .update({ "1_oneStar": int.parse(previousRating.toString()) + 1});
       }
-
-      else if (_rating <= 2){
+      else if (_rating <= 2) {
         FirebaseFirestore.instance
-            .collection("rating")
+            .collection("sellers")
             .doc(widget.sellerUID)
             .get()
-            .then((snap) {
-
+            .then((snap)
+        {
           previousRating = snap.data()!["2_twoStar"].toString();
-
-        }).then((value) {
-          FirebaseFirestore.instance
-              .collection("rating")
-              .doc(widget.sellerUID)
-              .update({ "2_twoStar" : int.parse(previousRating.toString()) + 1
-          });
-        });
-      }
-
-      else if (_rating <= 3){
-        FirebaseFirestore.instance
-            .collection("rating")
-            .doc(widget.sellerUID)
-            .get()
-            .then((snap) {
-
-          previousRating = snap.data()!["3_threeStar"].toString();
-
-        }).then((value) {
-          FirebaseFirestore.instance
-              .collection("rating")
-              .doc(widget.sellerUID)
-              .update({ "3_threeStar" : int.parse(previousRating.toString()) + 1
-          });
-        });
-      }
-      else if (_rating <= 4){
-        FirebaseFirestore.instance
-            .collection("rating")
-            .doc(widget.sellerUID)
-            .get()
-            .then((snap) {
-
-          previousRating = snap.data()!["4_fourStar"].toString();
-
-        }).then((value) {
-          FirebaseFirestore.instance
-              .collection("rating")
-              .doc(widget.sellerUID)
-              .update({ "4_fourStar" : int.parse(previousRating.toString()) + 1
-          });
-        });
-      }
-      else if (_rating <= 5){
-        FirebaseFirestore.instance
-            .collection("rating")
-            .doc(widget.sellerUID)
-            .get()
-            .then((snap) {
-
-          previousRating = snap.data()!["5_fiveStar"].toString();
-
-        }).then((value) {
-          FirebaseFirestore.instance
-              .collection("rating")
-              .doc(widget.sellerUID)
-              .update({ "5_fiveStar" : int.parse(previousRating.toString()) + 1
-          });
-        });
-      }
-    });
-  }
-
-  getOverallRating () {
-
-    FirebaseFirestore.instance
-        .collection("orders")
-        .doc(widget.orderID)
-        .get()
-        .then((snap) {
-      widget.sellerUID = snap.data()!["sellerUID"].toString();
-
-    }).then((value) {
-      FirebaseFirestore.instance
-          .collection("rating")
-          .doc(widget.sellerUID)
-          .get()
-          .then((snap) {
-
-        var one = snap.data()!["1_oneStar"].toString();
-        var two = snap.data()!["2_twoStar"].toString();
-        var three = snap.data()!["3_threeStar"].toString();
-        var four = snap.data()!["4_fourStar"].toString();
-        var five = snap.data()!["5_fiveStar"].toString();
-
-        previousOverallRating = snap.data()!["rating"].toString();
-
-        _totalRating = (5 * int.parse(five)  + 4 * int.parse(four) + 3 * int.parse(three) + 2 * int.parse(two) + 1 * int.parse(one)) / (int.parse(five)+int.parse(four)+int.parse(four)+int.parse(two)+int.parse(one));
-
-      }).then((value) {
-        FirebaseFirestore.instance
-            .collection("rating")
-            .doc(widget.sellerUID)
-            .update({"rating": (double.parse(previousOverallRating) + _totalRating).toStringAsFixed(1),
 
         }).then((value) {
           FirebaseFirestore.instance
               .collection("sellers")
               .doc(widget.sellerUID)
-              .update({
-            "rating": (double.parse(previousOverallRating) + _totalRating).toStringAsFixed(1),
+              .update({ "2_twoStar" : int.parse(previousRating.toString()) + 1
           });
         });
+      }
+      else if (_rating <= 3) {
+        FirebaseFirestore.instance
+            .collection("sellers")
+            .doc(widget.sellerUID)
+            .get()
+            .then((snap)
+        {
+          previousRating = snap.data()!["3_threeStar"].toString();
+
+        }).then((value) {
+          FirebaseFirestore.instance
+              .collection("sellers")
+              .doc(widget.sellerUID)
+              .update({ "3_threeStar" : int.parse(previousRating.toString()) + 1
+          });
+        });
+      }
+      else if (_rating <= 4) {
+        FirebaseFirestore.instance
+            .collection("sellers")
+            .doc(widget.sellerUID)
+            .get()
+            .then((snap)
+        {
+          previousRating = snap.data()!["4_fourStar"].toString();
+
+        }).then((value) {
+          FirebaseFirestore.instance
+              .collection("sellers")
+              .doc(widget.sellerUID)
+              .update({ "4_fourStar" : int.parse(previousRating.toString()) + 1
+          });
+        });
+      }
+      else if (_rating <= 5) {
+        FirebaseFirestore.instance
+            .collection("sellers")
+            .doc(widget.sellerUID)
+            .get()
+            .then((snap) {
+          previousRating = snap.data()!["5_fiveStar"].toString();
+        }).then((value) {
+          FirebaseFirestore.instance
+              .collection("sellers")
+              .doc(widget.sellerUID)
+              .update({ "5_fiveStar": int.parse(previousRating.toString()) + 1
+          });
+        });
+
+      }
+    });
+  }
+
+  getOverallRating() {
+    FirebaseFirestore.instance
+        .collection("sellers")
+        .doc(widget.sellerUID)
+        .get()
+        .then((snap) {
+
+      var one = snap.data()!["1_oneStar"].toString();
+      var two = snap.data()!["2_twoStar"].toString();
+      var three = snap.data()!["3_threeStar"].toString();
+      var four = snap.data()!["4_fourStar"].toString();
+      var five = snap.data()!["5_fiveStar"].toString();
+
+      _totalRating = (5 * int.parse(five) + 4 * int.parse(four) + 3 * int.parse(three) + 2 * int.parse(two) + 1 * int.parse(one)) / (int.parse(five) + int.parse(four) + int.parse(three) + int.parse(two) + int.parse(one));
+
+      // previousOverallRating = snap.data()!["rating"].toString();
+
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("sellers")
+          .doc(widget.sellerUID)
+          .update({
+        "rating": _totalRating.toStringAsFixed(1),
       });
     });
+    debugPrint("Rating " + _totalRating.toStringAsFixed(1));
   }
 
 
@@ -332,15 +303,19 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                         this._rating = 1;
                       }
                       else if (rating <= 2){
+                        shouldAbsorb = false;
                         this._rating = 2;
                       }
                       else if (rating <= 3){
+                        shouldAbsorb = false;
                         this._rating = 3;
                       }
                       else if (rating <= 4){
+                        shouldAbsorb = false;
                         this._rating = 4;
                       }
                       else if (rating <= 5){
+                        shouldAbsorb = false;
                         this._rating = 5;
                       }
                     }),
@@ -357,11 +332,8 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                             {
                               //getOrderTotalAmount();
                               //getOrderInfo()
-
                               getRating();
-
-                              // getOverallRating();
-
+                              getOverallRating();
                             },
                             child: Container(
                               color: (_rating == 0) ? Colors.grey : Colors.orangeAccent,

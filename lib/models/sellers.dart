@@ -1,15 +1,19 @@
+import 'dart:ffi';
+
 class Sellers
 {
   String? sellerUID;
   String? sellerName;
   String? sellerAvatarUrl;
   String? sellerEmail;
+  String? rating;
 
   Sellers({
     this.sellerUID,
     this.sellerName,
     this.sellerAvatarUrl,
     this.sellerEmail,
+    this.rating
   });
 
   Sellers.fromJson(Map<String, dynamic> json)
@@ -18,6 +22,7 @@ class Sellers
     sellerName = json["sellerName"];
     sellerAvatarUrl = json["sellerAvatarUrl"];
     sellerEmail = json["sellerEmail"];
+    rating = json["rating"];
   }
 
   Map<String, dynamic> toJson()
@@ -27,6 +32,7 @@ class Sellers
     data["sellerName"] = this.sellerName;
     data["sellerAvatarUrl"] = this.sellerAvatarUrl;
     data["sellerEmail"] = this.sellerEmail;
+    data["rating"] = this.sellerEmail;
     return data;
   }
 }

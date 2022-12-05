@@ -10,6 +10,8 @@ class Menus
   Timestamp? publishedDate;
   String? thumbnailUrl;
   String? status;
+  String? itemID;
+  int? quantity;
 
   Menus({
     this.menuID,
@@ -20,6 +22,8 @@ class Menus
     this.publishedDate,
     this.thumbnailUrl,
     this.status,
+    this.itemID,
+    this.quantity
   });
 
   Menus.fromJson(Map<String, dynamic> json)
@@ -32,6 +36,8 @@ class Menus
     publishedDate = json['publishedDate'];
     thumbnailUrl = json['thumbnailUrl'];
     status = json['status'];
+    itemID = json['itemID'];
+    quantity = json['quantity'];
   }
 
   Map<String, dynamic> toJson()
@@ -45,6 +51,8 @@ class Menus
     data['publishedDate'] = publishedDate;
     data['thumbnailUrl'] = thumbnailUrl;
     data['status'] = status;
+    data['itemID'] = itemID;
+    data['quantity'] = quantity;
 
     return data;
   }

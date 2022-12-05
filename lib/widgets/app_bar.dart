@@ -14,8 +14,6 @@ class MyAppBar extends StatefulWidget with PreferredSizeWidget
   final Sellers? model;
   MyAppBar({this.bottom, this.sellerUID, this.sellerName, this.model});
 
-
-
   @override
   _MyAppBarState createState() => _MyAppBarState();
 
@@ -51,7 +49,7 @@ class _MyAppBarState extends State<MyAppBar>
               onPressed: ()
               {
                 //send user to cart screen
-                Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.sellerUID,)));
+                Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.model!.sellerUID,)));
               },
             ),
             Positioned(

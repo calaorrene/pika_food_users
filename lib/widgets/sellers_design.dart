@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pika_food_cutomer/mainScreens/menus_screen.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
 
@@ -13,8 +14,6 @@ class SellersDesignWidget extends StatefulWidget
   @override
   _SellersDesignWidgetState createState() => _SellersDesignWidgetState();
 }
-
-
 
 class _SellersDesignWidgetState extends State<SellersDesignWidget> {
   @override
@@ -96,7 +95,7 @@ class _SellersDesignWidgetState extends State<SellersDesignWidget> {
                             child: Icon(Icons.star, size: 14, color: Colors.yellow,),
                           ),
                           TextSpan(
-                            text: "4.6",
+                            text: widget.model!.rating.toString(),
                           ),
                         ],
                       ),

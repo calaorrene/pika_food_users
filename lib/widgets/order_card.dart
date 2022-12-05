@@ -7,20 +7,20 @@ import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 
 class OrderCard extends StatelessWidget
 {
-  final int? itemCount;
   final List<DocumentSnapshot>? data;
+  final List<String>? seperateQuantitiesList;
+  final int? itemCount;
   final String? orderID;
   final String? sellerUID;
-  final List<String>? seperateQuantitiesList;
   late String? sellerName;
   late String? totalAmount;
 
   OrderCard({
-    this.itemCount,
     this.data,
+    this.seperateQuantitiesList,
+    this.itemCount,
     this.orderID,
     this.sellerUID,
-    this.seperateQuantitiesList,
     this.sellerName,
     this.totalAmount,
   });
@@ -32,7 +32,6 @@ class OrderCard extends StatelessWidget
       onTap: ()
       {
         Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailsScreen(orderID: orderID, sellerUID: sellerUID)));
-        debugPrint("Test: " + sellerUID.toString());
       },
       child: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
@@ -105,7 +104,7 @@ class OrderCard extends StatelessWidget
                           return Align(
                             heightFactor: 0.3,
                             alignment: Alignment.topCenter,
-                            child: placedOrderDesignWidget(model, context, seperateQuantitiesList![index]),
+                            child: OrderCardDesignWidget(model, context, seperateQuantitiesList![index]),
                           );
                         },
                       ),
@@ -121,7 +120,8 @@ class OrderCard extends StatelessWidget
     );
   }
 }
-Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuantitiesList)
+
+Widget OrderCardDesignWidget(Items model, BuildContext context, seperateQuantitiesList)
 {
   return Container(
     width: MediaQuery.of(context).size.width,

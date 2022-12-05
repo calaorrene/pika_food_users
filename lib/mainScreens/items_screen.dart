@@ -18,8 +18,6 @@ class ItemsScreen extends StatefulWidget
   _ItemsScreenState createState() => _ItemsScreenState();
 }
 
-
-
 class _ItemsScreenState extends State<ItemsScreen> {
   @override
   Widget build(BuildContext context) {
@@ -41,10 +39,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 .snapshots(),
             builder: (context, snapshot)
             {
-              return !snapshot.hasData
-                  ? SliverToBoxAdapter(
-                child: Center(child: circularProgress(),),
-              )
+              return !snapshot.hasData ? SliverToBoxAdapter(
+                child: Center(child: circularProgress(),),)
+
                   : SliverStaggeredGrid.countBuilder(
                 crossAxisCount: 3,
                 mainAxisSpacing: 1,
