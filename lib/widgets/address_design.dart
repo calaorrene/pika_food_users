@@ -61,6 +61,8 @@ class _AddressDesignState extends State<AddressDesign>
         "sellerName": _sellerName,
         "status": "preparing",
         "orderId": orderId,
+        "comment": "",
+        "rate" : 0.0
       });
 
       writeOrderDetailsForSeller({
@@ -75,6 +77,8 @@ class _AddressDesignState extends State<AddressDesign>
         "sellerName": _sellerName,
         "status": "preparing",
         "orderId": orderId,
+        "comment": "",
+        "rate" : 0.0
       }).whenComplete((){
         clearCartNow(context);
         setState(() {

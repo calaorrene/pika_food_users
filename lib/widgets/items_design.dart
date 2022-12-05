@@ -201,6 +201,7 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
 
       writeUserCart({
         "itemID": widget.model!.itemID,
+        "sellerUID": widget.model!.sellerUID,
         "productName": widget.model!.name,
         "thumbnail": widget.model!.thumbnailUrl,
         "quantity": int.parse(counterTextEditingController.text),

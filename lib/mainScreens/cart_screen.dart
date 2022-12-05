@@ -12,8 +12,6 @@ import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
 
-import '../global/global.dart';
-
 
 class CartScreen extends StatefulWidget
 {
@@ -31,16 +29,8 @@ class CartScreen extends StatefulWidget
 
 class _CartScreenState extends State<CartScreen>
 {
-  List<DocumentSnapshot>? data;
-  List<String>? seperateQuantitiesList;
-
-  int? itemCount;
-
   List<int>? separateItemQuantityList;
   num totalAmount = 0;
-  String price = "";
-  String quantity = "";
-
 
   @override
   void initState() {
@@ -160,167 +150,88 @@ class _CartScreenState extends State<CartScreen>
           ),
         ],
       ),
+      body: CustomScrollView(
+        slivers: [
 
-      body: InkWell(
-        onTap: ()
-        {
+          //overall total amount
+          SliverPersistentHeader(
+              pinned: true,
+              delegate: TextWidgetHeader(title: "My Cart List")
+          ),
 
-        },
-        child: FutureBuilder<DocumentSnapshot>(
-          future: FirebaseFirestore.instance
-              .collection("users")
-              .doc(sharedPreferences!.getString("uid"))
-              .collection("userCart")
-              .doc(widget.model!.itemID)
-              .get(),
-          builder: (c, snapshot)
-          {
-            Map? dataMap;
-            if(snapshot.hasData)
+          SliverToBoxAdapter(
+            child: Consumer2<TotalAmount, CartItemCounter>(builder: (context, amountProvider, cartProvider, c)
             {
-              dataMap = snapshot.data!.data()! as Map<String, dynamic>;
-              price = dataMap["price"].toString();
-              quantity = dataMap["quantity"].toString();
-            }
-            return snapshot.hasData
-                ? Container(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10,),
-                  Text(
-                    widget.model!.sellerName.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontFamily: "Acme",
-                    ),
-                  ),
-                  SizedBox(height: 5,),
-                  Text(
-                    "Total Amount: ₱" + totalAmount.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontFamily: "Acme",
-                    ),
-                  ),
-                  SizedBox(height: 5,),
-                  Text(
-                    "More Info >>",
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 13,
-                      fontFamily: "Acme",
-                    ),
-                  ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    margin: const EdgeInsets.all(5),
-                    height: itemCount! * 50,
-                    child: Stack(
-                      children: [
-                        Padding(padding: EdgeInsets.all(10)),
-                        ListView.builder(
-                          itemCount: itemCount,
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index)
-                          {
-                            Items model = Items.fromJson(data![index].data()! as Map<String, dynamic>);
-                            return Align(
-                              heightFactor: 0.3,
-                              alignment: Alignment.topCenter,
-                              child: placedOrderDesignWidget(model, context, seperateQuantitiesList![index]),
-                            );
-                          },
+              return Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: cartProvider.count == 0
+                      ? Container()
+                      : Text(
+                          "Total Price: " + amountProvider.tAmount.toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight:  FontWeight.w500,
+                            ),
                         ),
-                      ],
-                    ),
+                ),
+              );
+            }),
+          ),
+
+          //display cart items with quantity number
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("items")
+                .where("itemID", whereIn: separateItemIDs())
+                .orderBy("publishedDate", descending: true)
+                .snapshots(),
+            builder: (context, snapshot)
+            {
+              return !snapshot.hasData
+                  ? SliverToBoxAdapter(child: Center(child: circularProgress(),),)
+                  : snapshot.data!.docs.length == 0
+                  ? //startBuildingCart()
+                     Container()
+                  : SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index)
+                    {
+                      Items model = Items.fromJson(
+                        snapshot.data!.docs[index].data()! as Map<String, dynamic>,
+                      );
+
+                      if(index == 0)
+                      {
+                        totalAmount = 0;
+                        totalAmount = totalAmount + (model.price! * separateItemQuantityList![index]);
+                      }
+                      else
+                      {
+                        totalAmount = totalAmount + (model.price! * separateItemQuantityList![index]);
+                      }
+
+                      if(snapshot.data!.docs.length - 1 == index)
+                      {
+                        WidgetsBinding.instance.addPostFrameCallback((timeStamp)
+                        {
+                          Provider.of<TotalAmount>(context, listen: false).displayTotalAmount(totalAmount.toDouble());
+                        });
+                      }
+
+                      return CartItemDesign(
+                        model: model,
+                        context: context,
+                        quanNumber: separateItemQuantityList![index],
+                      );
+                    },
+                    childCount: snapshot.hasData ? snapshot.data!.docs.length : 0,
                   ),
-                ],
-              ),
-            )
-                : Center(child: circularProgress(),);
-          },
-        ),
-      )
+                 );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
-
-Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuantitiesList)
-{
-  return Container(
-    width: MediaQuery.of(context).size.width,
-    height: 110,
-
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 3,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0), //add border radius
-            child: Image.network(model.thumbnailUrl!, width: 90, height: 90, fit: BoxFit.cover,),
-          ),
-          const SizedBox(width: 10.0,),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        model.name! + " x " + seperateQuantitiesList,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontFamily: "Acme",
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 5,
-                ),
-
-                Text(
-                  "₱ " + model.price.toString(),
-                  style: TextStyle(fontSize: 16.0, color: Colors.blue),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-

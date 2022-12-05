@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/models/address.dart';
@@ -22,6 +23,8 @@ class OrderDetailsRate extends StatefulWidget
 
 class _OrderDetailsRateState extends State<OrderDetailsRate>
 {
+  late TextEditingController _controllerComment = TextEditingController();
+
   String ratingID = DateTime.now().millisecondsSinceEpoch.toString();
   String orderTotalAmount = "";
   String orderStatus = "";
@@ -196,8 +199,75 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
           .update({
         "rating": _totalRating.toStringAsFixed(1),
       });
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("orders")
+          .doc(widget.orderID)
+          .update({"comment" : _controllerComment.text});
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("orders")
+          .doc(widget.orderID)
+          .update({"rate" : _rating});
+    });;
+    debugPrint("Test " + widget.orderID.toString());
+
+  }
+
+  addOrderDetails()
+  {
+    FirebaseFirestore.instance
+        .collection("sellers")
+        .doc(widget.sellerUID).get().then((snap)
+    {
+
+    }).then((value) {
+      writeOrderDetailsForUser({
+        "orderBy": sharedPreferences!.getString("uid"),
+        "productIDs": sharedPreferences!.getStringList("userCart"),
+        "paymentDetails": "Cash on Delivery",
+        "orderTime": widget.orderID,
+        "isSuccess": true,
+        "sellerUID": widget.sellerUID,
+        "status": "torate",
+        "orderId": widget.orderID,
+        "comment": _controllerComment.text
+      });
+
+      writeOrderDetailsForSeller({
+        "orderBy": sharedPreferences!.getString("uid"),
+        "productIDs": sharedPreferences!.getStringList("userCart"),
+        "paymentDetails": "Cash on Delivery",
+        "orderTime": widget.orderID,
+        "isSuccess": true,
+        "sellerUID": widget.sellerUID,
+        "status": "ended",
+        "orderId": widget.orderID,
+        "comment": _controllerComment.text
+      }).whenComplete((){
+        setState(() {
+          Fluttertoast.showToast(msg: "Congratulations, Order has been placed successfully.");
+        });
+      });
     });
-    debugPrint("Rating " + _totalRating.toStringAsFixed(1));
+  }
+
+  Future writeOrderDetailsForUser(Map<String, dynamic> data) async
+  {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(sharedPreferences!.getString("uid"))
+        .collection("orders")
+        .doc(widget.orderID)
+        .set(data);
+  }
+
+  Future writeOrderDetailsForSeller(Map<String, dynamic> data) async
+  {
+    await FirebaseFirestore.instance
+        .collection("orders")
+        .doc(widget.orderID)
+        .set(data);
   }
 
 
@@ -323,32 +393,55 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
 
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Center(
-                      child: InkWell(
-                        child: AbsorbPointer(
-                          absorbing: shouldAbsorb,
-                          child: GestureDetector(
-                            onTap: ()
-                            {
-                              //getOrderTotalAmount();
-                              //getOrderInfo()
-                              getRating();
-                              getOverallRating();
-                            },
-                            child: Container(
-                              color: (_rating == 0) ? Colors.grey : Colors.orangeAccent,
-                              width: MediaQuery.of(context).size.width - 40,
-                              height: 50,
-                              child: const Center(
-                                child: Text(
-                                  "Rate",
-                                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: InkWell(
+                            child: AbsorbPointer(
+                              absorbing: shouldAbsorb,
+                              child: GestureDetector(
+                                onTap: ()
+                                {
+                                  //getOrderTotalAmount();
+                                  getOrderInfo();
+                                  getRating();
+                                  getOverallRating();
+                                },
+                                child: Container(
+                                  color: (_rating == 0) ? Colors.grey : Colors.orangeAccent,
+                                  width: MediaQuery.of(context).size.width - 40,
+                                  height: 50,
+                                  child: const Center(
+                                    child: Text(
+                                      "Rate",
+                                      style: TextStyle(color: Colors.white, fontSize: 15.0),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+
+                        Container(
+                          height: 500,
+                          child: TextField(
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                            controller: _controllerComment,
+                            textAlign: TextAlign.center,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.green, width: 2.0),
+                                ),
+                                border: InputBorder.none,
+                                hintText: ("Add Comment(Optional)"),
+                                hintStyle: TextStyle(color: Colors.grey.shade500)),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

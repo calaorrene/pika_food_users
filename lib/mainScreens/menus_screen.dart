@@ -12,6 +12,7 @@ import 'package:pika_food_cutomer/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
 
 import '../assistantMethods/cart_Item_counter.dart';
+import 'my_cart_screen.dart';
 
 
 class MenusScreen extends StatefulWidget
@@ -62,7 +63,8 @@ class _MenusScreenState extends State<MenusScreen>
                 onPressed: ()
                 {
                   //send user to cart screen
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> CartScreen(sellerUID: widget.sellerUID,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> MyCartScreen(sellerUID: widget.model!.sellerUID)));
+                  //debugPrint("Test: " + widget.model!.sellerUID.toString());
                 },
               ),
               Positioned(

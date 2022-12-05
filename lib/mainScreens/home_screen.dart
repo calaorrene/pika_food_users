@@ -123,49 +123,6 @@ class _HomeScreenState extends State<HomeScreen>
       drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
-          /* SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height * .3,
-                width: MediaQuery.of(context).size.width,
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    height: MediaQuery.of(context).size.height * .3,
-                    aspectRatio: 16/9,
-                    viewportFraction: 0.8,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: const Duration(seconds: 2),
-                    autoPlayAnimationDuration: const Duration(milliseconds: 500),
-                    autoPlayCurve: Curves.decelerate,
-                    enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                  items: items.map((index) {
-                    return Builder(builder: (BuildContext context){
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 1.0),
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Image.asset(
-                            index,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      );
-                    });
-                  }).toList(),
-                ),
-              ),
-            ),
-          ), */
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("sellers")

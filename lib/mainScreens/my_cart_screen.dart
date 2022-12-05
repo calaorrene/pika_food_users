@@ -15,10 +15,12 @@ final usersRef = FirebaseFirestore.instance.collection('users')
 
 class MyCartScreen extends StatefulWidget {
 
+  final String? sellerUID;
+
   final UserCart? model;
   final BuildContext? context;
 
-  MyCartScreen({this.model, this.context});
+  MyCartScreen({this.model, this.context, this.sellerUID});
 
   @override
   State<MyCartScreen> createState() => _MyCartScreenState();
@@ -28,6 +30,38 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
   String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
+  addOrderDetails()
+  {
+    writeOrderDetailsForUser({
+      "totalAmount": "0",
+      "orderBy": sharedPreferences!.getString("uid"),
+      //"productIDs": sharedPreferences!.getStringList("userCart"),
+      "paymentDetails": "Cash on Delivery",
+      "orderTime": orderId,
+      "isSuccess": true,
+      "sellerUID": widget.sellerUID,
+      "status": "preparing",
+      "orderId": orderId,
+    });
+
+    writeOrderDetailsForSeller({
+      "totalAmount": "0",
+      "orderBy": sharedPreferences!.getString("uid"),
+      //"productIDs": sharedPreferences!.getStringList("userCart"),
+      "paymentDetails": "Cash on Delivery",
+      "orderTime": orderId,
+      "isSuccess": true,
+      "sellerUID": widget.sellerUID,
+      "status": "preparing",
+      "orderId": orderId,
+    }).whenComplete((){
+      setState(() {
+        orderId="";
+        Navigator.pop(context);
+        Fluttertoast.showToast(msg: "Congratulations, Order has been placed successfully.");
+      });
+    });
+  }
 
   Future writeOrderDetailsForUser(Map<String, dynamic> data) async
   {
@@ -49,6 +83,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
   @override
   void initState() {
+    debugPrint("Test: " + widget!.sellerUID.toString());
     super.initState();
   }
 
@@ -95,7 +130,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
             Spacer(),
 
-            Text("Total Amount: "),
+            Text("Total Amount: " ),
 
             Spacer(),
 
@@ -152,7 +187,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               InkWell(
                                 onTap: ()
                                 {
-
+                                  addOrderDetails();
                                 },
                                 child: Container(
                                   height: 30,
