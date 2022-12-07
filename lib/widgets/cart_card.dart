@@ -23,7 +23,6 @@ class CartCard extends StatefulWidget
 
 class _CartCardState extends State<CartCard> {
 
-
   final TextEditingController counterTextEditingController = TextEditingController();
 
   late TextEditingController _controllerQuantity = TextEditingController();
@@ -31,6 +30,60 @@ class _CartCardState extends State<CartCard> {
   int quantity = 0;
   double price = 0;
   double totalAmount = 0;
+
+  List<String> _userCartList = [];
+
+  Future getAmount() async {
+    String totalAmount;
+    List<double> totalAmounts = [];
+
+    String quantity;
+    List<int> quantities = [];
+
+    List<String> IDs = [];
+
+    double _totalAmount = 0;
+
+    Future getDocs() async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(sharedPreferences!.getString("uid"))
+          .collection("userCart").get();
+
+      for (int i = 0; i < querySnapshot.docs.length; i++) {
+
+        var itemIDs = querySnapshot.docs[i];
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(sharedPreferences!.getString('uid'))
+            .collection("userCart")
+            .doc(itemIDs.id)
+            .get().then((snap)
+        {
+          quantity = snap.data()!["quantity"].toString();
+          quantities.add(int.parse(quantity));
+
+          totalAmount = snap.data()!["totalAmount"].toString();
+          totalAmounts.add(double.parse(totalAmount));
+
+          IDs.add(itemIDs.id + ":$quantity");
+
+          _totalAmount += totalAmounts[i];
+        });
+      }
+
+      print(IDs);
+      print(quantities);
+      print(_totalAmount);
+
+      await sharedPreferences!.setDouble("totalAmount", _totalAmount);
+      List<String> userCartList = IDs.toList().cast<String>();
+      _userCartList = userCartList;
+      await sharedPreferences!.setStringList("myUserCart", userCartList);
+    }
+    getDocs();
+  }
 
   getPrice() {
     FirebaseFirestore.instance
@@ -61,6 +114,7 @@ class _CartCardState extends State<CartCard> {
   }
 
   incQuantity(){
+    getAmount();
     quantity++;
     _controllerQuantity.text = quantity.toString();
 
@@ -267,7 +321,10 @@ class _CartCardState extends State<CartCard> {
                                     alignment: Alignment.center,
                                     padding: EdgeInsets.zero,
                                     onPressed: () {
+
                                       incQuantity();
+                                      getAmount();
+
                                     },
                                     icon: Icon(
                                       Icons.add,
@@ -306,11 +363,13 @@ class _CartCardState extends State<CartCard> {
                   icon: const Icon(Icons.delete_forever_outlined, size: 50, color: Colors.grey,),
                   onPressed: () async
                   {
+
                     deleteItem(itemID: widget.model!.itemID);
                     Fluttertoast.showToast(msg: "Deleted.");
                   },
                 ),
               ),
+
             ],
           ),
         ),

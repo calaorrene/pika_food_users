@@ -91,7 +91,7 @@ class OrderCard extends StatelessWidget
                   ),
                   padding: const EdgeInsets.all(5),
                   margin: const EdgeInsets.all(5),
-                  height: itemCount! * 50,
+                  height: itemCount! * 55,
                   child: Stack(
                     children: [
                       Padding(padding: EdgeInsets.all(10)),

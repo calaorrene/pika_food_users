@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pika_food_cutomer/assistantMethods/cart_Item_counter.dart';
 import 'package:pika_food_cutomer/global/global.dart';
 import 'package:pika_food_cutomer/mainScreens/my_cart_screen.dart';
+import 'package:pika_food_cutomer/models/UserCart.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
 import 'package:pika_food_cutomer/splashScreen/splash_screen.dart';
 import 'package:pika_food_cutomer/widgets/my_drawer.dart';
@@ -20,7 +21,7 @@ class HomeScreen extends StatefulWidget
 {
   final Sellers? model;
   final String? sellerUID;
-  const HomeScreen({this.model, this.sellerUID});
+  const HomeScreen({this.model, this.sellerUID,});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -71,54 +72,6 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         centerTitle: true,
         automaticallyImplyLeading: true,
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.shopping_cart, color: Colors.white,),
-                onPressed: ()
-                {
-                  //send user to cart screen
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> MyCartScreen()));
-                },
-              ),
-              Positioned(
-                child: Stack(
-                  children: [
-                    const Icon(
-                      Icons.brightness_1,
-                      size: 20.0,
-                      color: Colors.redAccent,
-                    ),
-                    Positioned(
-                      top: 3,
-                      right: 4,
-                      child: Center(
-                        child: Consumer<CartItemCounter>(
-                          builder: (context, counter, c)
-                          {
-                            return Text(
-                              counter.count.toString(),
-                              style: const TextStyle(color: Colors.white, fontSize: 12),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.shopping_cart, color: Colors.white,),
-                onPressed: ()
-                {
-                  //send user to cart screen
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> MyCartScreen()));
-                },
-              ),
-            ],
-          ),
-        ],
       ),
       drawer: MyDrawer(),
       body: CustomScrollView(

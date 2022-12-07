@@ -94,7 +94,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                           child: Align(
                             alignment: Alignment.center,
                             child: Text(
-                              "₱  " + dataMap["totalAmount"].toString(),
+                              "Total Amount: ₱ " + dataMap["totalAmount"].toString(),
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -111,26 +111,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                             style: const TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ),
-                        const Divider(thickness: 4,),
-                        FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance
-                              .collection("users")
-                              .doc(sharedPreferences!.getString("uid"))
-                              .collection("userAddress")
-                              .doc(dataMap["addressID"])
-                              .get(),
-                          builder: (c, snapshot)
-                          {
-                            return snapshot.hasData
-                                ? ShipmentAddressDesign(
-                                    model: Address.fromJson(
-                                      snapshot.data!.data()! as Map<String, dynamic>
-                                    ),
-                                      orderStatus: orderStatus,
-                                  )
-                                : Center(child: circularProgress(),);
-                          },
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Orders " + dataMap["ProductIDs"].toString(),
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
+
+                        const Divider(thickness: 4,),
 
                         orderStatus == "preparing"
                             ? Container(child: Text("Preparing..."))

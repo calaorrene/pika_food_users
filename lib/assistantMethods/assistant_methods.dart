@@ -83,7 +83,7 @@ separateOrderItemQuantities(orderIDs)
 {
   List<String> separateItemQuantityList=[];
   List<String> defaultItemList=[];
-  int i=1;
+  int i=0;
 
   defaultItemList = List<String>.from(orderIDs);
 
@@ -169,6 +169,21 @@ deleteItem({String? itemID})
       .doc(itemID)
       .delete().then((value) {
     print("Success!");
+  });
+}
+
+clearCartNow2(context)
+{
+  FirebaseFirestore.instance
+      .collection("users")
+      .doc(firebaseAuth.currentUser!.uid)
+      .collection("userCart")
+      .snapshots().forEach((querySnapshot)
+
+  {
+    for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+      docSnapshot.reference.delete();
+    }
   });
 }
 

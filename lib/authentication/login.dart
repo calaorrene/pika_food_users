@@ -82,6 +82,9 @@ class _LoginScreenState extends State<LoginScreen>
     if(currentUser != null)
     {
       readDataAndSetDataLocally(currentUser!);
+      //saveUserCart(currentUser!);
+      saveUserCart(currentUser!);
+      getAmount(currentUser!);
     }
   }
 
@@ -102,6 +105,8 @@ class _LoginScreenState extends State<LoginScreen>
 
               List<String> userCartList = snapshot.data()!["userCart"].cast<String>();
               await sharedPreferences!.setStringList("userCart", userCartList);
+
+              print("Type: " + userCartList.toString());
 
               Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(builder: (c)=> const HomeScreen()));
@@ -130,6 +135,116 @@ class _LoginScreenState extends State<LoginScreen>
             );
           }
         });
+  }
+
+  Future saveUserCart1(User currentUser) async
+  {
+    List<String> IDs = [];
+
+    List<String> totalAmounts = [];
+
+    Future getDocs() async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection("userCart").get();
+
+      for (int i = 0; i < querySnapshot.docs.length; i++) {
+
+        var itemIDs = querySnapshot.docs[i];
+
+        IDs.add(itemIDs.id);
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection("userCart")
+            .doc(itemIDs.id)
+            .get().then((DocumentSnapshot ds){
+          String totalAmount = (ds.data as DocumentSnapshot)['totalAmount'];
+
+          totalAmounts.add(totalAmount);
+        });
+      }
+    }
+    getDocs();
+
+    print(totalAmounts);
+
+    List<String> userCartList = IDs.toList().cast<String>();
+    await sharedPreferences!.setStringList("myUserCart", userCartList);
+  }
+
+  Future saveUserCart(User currentUser) async
+  {
+    Future getDocs() async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection("userCart").get();
+
+      dynamic docs = querySnapshot.docs;
+      var mapData = docs.map((res) => res['itemID']);
+
+      List<String> userCartList = mapData.toList().cast<String>();
+      await sharedPreferences!.setStringList("myUserCart", userCartList);
+
+      print("Type 2: " + userCartList.toString());
+    }
+    getDocs();
+  }
+
+  Future getAmount(User currentUser) async {
+    List<String> _userCartList = [];
+    String totalAmount;
+    List<double> totalAmounts = [];
+
+    String quantity;
+    List<int> quantities = [];
+
+    List<String> IDs = [];
+
+    double _totalAmount = 0;
+
+    Future getDocs() async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(sharedPreferences!.getString("uid"))
+          .collection("userCart").get();
+
+      for (int i = 0; i < querySnapshot.docs.length; i++) {
+
+        var itemIDs = querySnapshot.docs[i];
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(sharedPreferences!.getString('uid'))
+            .collection("userCart")
+            .doc(itemIDs.id)
+            .get().then((snap)
+        {
+          quantity = snap.data()!["quantity"].toString();
+          quantities.add(int.parse(quantity));
+
+          totalAmount = snap.data()!["totalAmount"].toString();
+          totalAmounts.add(double.parse(totalAmount));
+
+          IDs.add(itemIDs.id + ":$quantity");
+
+          _totalAmount += totalAmounts[i];
+        });
+      }
+
+      print(IDs);
+      print(quantities);
+      print(_totalAmount);
+
+      await sharedPreferences!.setDouble("totalAmount", _totalAmount);
+      List<String> userCartList = IDs.toList().cast<String>();
+      _userCartList = userCartList;
+      await sharedPreferences!.setStringList("myUserCart", userCartList);
+    }
+    getDocs();
   }
 
   @override

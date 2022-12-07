@@ -155,7 +155,7 @@ class _CartItemDesignState extends State<CartItemDesign> {
                   icon: const Icon(Icons.delete_forever_outlined, size: 50, color: Colors.grey,),
                   onPressed: () async
                   {
-                    //deleteItem(context);
+                    clearCartNow(context);
 
                     Fluttertoast.showToast(msg: "Deleted.");
                   },

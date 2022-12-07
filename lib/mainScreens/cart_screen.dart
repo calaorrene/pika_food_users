@@ -152,7 +152,6 @@ class _CartScreenState extends State<CartScreen>
       ),
       body: CustomScrollView(
         slivers: [
-
           //overall total amount
           SliverPersistentHeader(
               pinned: true,

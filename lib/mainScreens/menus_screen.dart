@@ -1,19 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:pika_food_cutomer/assistantMethods/assistant_methods.dart';
-import 'package:pika_food_cutomer/mainScreens/cart_screen.dart';
 import 'package:pika_food_cutomer/models/menus.dart';
 import 'package:pika_food_cutomer/models/sellers.dart';
-import 'package:pika_food_cutomer/splashScreen/splash_screen.dart';
 import 'package:pika_food_cutomer/widgets/menus_design.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';
-import 'package:pika_food_cutomer/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
-
 import '../assistantMethods/cart_Item_counter.dart';
 import 'my_cart_screen.dart';
-
 
 class MenusScreen extends StatefulWidget
 {
@@ -63,8 +57,8 @@ class _MenusScreenState extends State<MenusScreen>
                 onPressed: ()
                 {
                   //send user to cart screen
-                  Navigator.push(context, MaterialPageRoute(builder: (c)=> MyCartScreen(sellerUID: widget.model!.sellerUID)));
-                  //debugPrint("Test: " + widget.model!.sellerUID.toString());
+                  Navigator.push(context, MaterialPageRoute(builder: (c)=> MyCartScreen(sellerUID: widget.model!.sellerUID,)));
+                  debugPrint("Test: " + widget.model!.sellerUID.toString());
                 },
               ),
               Positioned(
