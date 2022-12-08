@@ -12,6 +12,8 @@ import 'package:pika_food_cutomer/widgets/progress_bar.dart';
 import 'package:pika_food_cutomer/widgets/text_widget_header.dart';
 import 'package:provider/provider.dart';
 
+import '../global/global.dart';
+
 
 class CartScreen extends StatefulWidget
 {
@@ -184,7 +186,6 @@ class _CartScreenState extends State<CartScreen>
             stream: FirebaseFirestore.instance
                 .collection("items")
                 .where("itemID", whereIn: separateItemIDs())
-                .orderBy("publishedDate", descending: true)
                 .snapshots(),
             builder: (context, snapshot)
             {
@@ -230,6 +231,19 @@ class _CartScreenState extends State<CartScreen>
             },
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(10, 10, 0, 20),
+        child: Text(
+          "Total Price: ₱ " + sharedPreferences!.getDouble('totalAmount').toString(),
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight:  FontWeight.w500,
+          ),
+        ),
       ),
     );
   }

@@ -363,7 +363,6 @@ class _CartCardState extends State<CartCard> {
                   icon: const Icon(Icons.delete_forever_outlined, size: 50, color: Colors.grey,),
                   onPressed: () async
                   {
-
                     deleteItem(itemID: widget.model!.itemID);
                     Fluttertoast.showToast(msg: "Deleted.");
                   },

@@ -60,25 +60,6 @@ separateItemIDs()
   return separateItemIDsList;
 }
 
-addItemToCart(String? foodItemId, BuildContext context, int itemCounter)
-{
-  List<String>? tempList = sharedPreferences!.getStringList("userCart");
-  tempList!.add(foodItemId! + ":$itemCounter"); //56557657:7
-  
-  FirebaseFirestore.instance.collection("users")
-      .doc(firebaseAuth.currentUser!.uid).update({
-    "userCart": tempList,
-  }).then((value)
-  {
-    Fluttertoast.showToast(msg: "Item Added Successfully.");
-
-    sharedPreferences!.setStringList("userCart", tempList);
-
-    //update the badge
-    Provider.of<CartItemCounter>(context, listen: false).displayCartListItemsNumber();
-  });
-}
-
 separateOrderItemQuantities(orderIDs)
 {
   List<String> separateItemQuantityList=[];
@@ -160,8 +141,7 @@ clearCartNow(context)
   });
 }
 
-deleteItem({String? itemID})
-{
+deleteItem({String? itemID}) {
   FirebaseFirestore.instance
       .collection("users")
       .doc(sharedPreferences!.getString("uid"))
@@ -172,18 +152,71 @@ deleteItem({String? itemID})
   });
 }
 
-clearCartNow2(context)
+deleteItemToCart(String? foodItemId, BuildContext context, int quantity)
 {
+  String itemID = foodItemId!+ ":$quantity";
+
+  List<String>? tempList = sharedPreferences!.getStringList("userCart");
+  tempList!.remove(foodItemId! + ":$quantity");
+
   FirebaseFirestore.instance
       .collection("users")
       .doc(firebaseAuth.currentUser!.uid)
-      .collection("userCart")
-      .snapshots().forEach((querySnapshot)
-
+      .update({'userCart' : FieldValue.arrayRemove([itemID]),
+  }).then((value)
   {
-    for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
-      docSnapshot.reference.delete();
-    }
+    print("ItemID " + itemID);
+
+    sharedPreferences!.setStringList("userCart", tempList);
+
+    Provider.of<CartItemCounter>(context, listen: false).displayCartListItemsNumber();
   });
 }
 
+addItemToCart(String? foodItemId, BuildContext context, int itemCounter)
+{
+
+
+  List<String>? tempList = sharedPreferences!.getStringList("userCart");
+  tempList!.add(foodItemId! + ":$itemCounter"); //56557657:7
+
+  FirebaseFirestore.instance.collection("users")
+      .doc(firebaseAuth.currentUser!.uid).update({
+    "userCart": tempList,
+  }).then((value)
+  {
+    Fluttertoast.showToast(msg: "Item Added Successfully.");
+
+    sharedPreferences!.setStringList("userCart", tempList);
+    //update the badge
+    Provider.of<CartItemCounter>(context, listen: false).displayCartListItemsNumber();
+  });
+}
+
+mycClearCartNow(context)
+{
+  sharedPreferences!.setStringList("myUserCart", []);
+  List<String>? emptyList = sharedPreferences!.getStringList("myUserCart");
+
+  FirebaseFirestore.instance
+      .collection("users")
+      .doc(firebaseAuth.currentUser!.uid)
+      .update({
+    "userCart": ['garbageValue']
+      }).then((value)
+  {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .collection('userCart')
+        .snapshots()
+        .forEach((querySnapshot) {
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        docSnapshot.reference.delete();
+      }
+    }).then((value) {
+      sharedPreferences!.setStringList("myUserCart", emptyList!);
+      Provider.of<CartItemCounter>(context, listen: false).displayCartListItemsNumber();
+    });
+  });
+}

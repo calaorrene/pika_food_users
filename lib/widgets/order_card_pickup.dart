@@ -48,8 +48,7 @@ class OrderCardPickup extends StatelessWidget
   }
 }
 
-Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuantitiesList)
-{
+Widget placedOrderDesignWidget(Items model, BuildContext context, seperateQuantitiesList) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 110,

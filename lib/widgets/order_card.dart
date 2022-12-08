@@ -50,8 +50,8 @@ class OrderCard extends StatelessWidget
             sellerName = dataMap["sellerName"].toString();
           }
           return snapshot.hasData
-              ? Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              ? Container( margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -91,7 +91,7 @@ class OrderCard extends StatelessWidget
                   ),
                   padding: const EdgeInsets.all(5),
                   margin: const EdgeInsets.all(5),
-                  height: itemCount! * 55,
+                  height: itemCount! * 70,
                   child: Stack(
                     children: [
                       Padding(padding: EdgeInsets.all(10)),

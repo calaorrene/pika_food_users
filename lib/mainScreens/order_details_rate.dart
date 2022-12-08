@@ -4,9 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:pika_food_cutomer/global/global.dart';
-import 'package:pika_food_cutomer/models/address.dart';
 import 'package:pika_food_cutomer/widgets/progress_bar.dart';
-import 'package:pika_food_cutomer/widgets/shipment_address_design.dart';
 import 'package:pika_food_cutomer/widgets/status_banner.dart';
 
 
@@ -56,7 +54,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
             .doc(widget.sellerUID)
             .update(
             {
-              "earnings" : (double.parse(orderTotalAmount) + (double.parse(previousEarnings))).toString(),
+              "earnings" : (double.parse(orderTotalAmount) + (double.parse(previousEarnings))).toStringAsFixed(2),
             });
       });
     });
@@ -103,7 +101,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
         FirebaseFirestore.instance
             .collection("sellers")
             .doc(widget.sellerUID)
-            .update({ "1_oneStar": int.parse(previousRating.toString()) + 1});
+            .update({ "1_oneStar": double.parse(previousRating.toString()) + 1});
       }
       else if (_rating <= 2) {
         FirebaseFirestore.instance
@@ -113,12 +111,11 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
             .then((snap)
         {
           previousRating = snap.data()!["2_twoStar"].toString();
-
         }).then((value) {
           FirebaseFirestore.instance
               .collection("sellers")
               .doc(widget.sellerUID)
-              .update({ "2_twoStar" : int.parse(previousRating.toString()) + 1
+              .update({ "2_twoStar" : double.parse(previousRating.toString()) + 1
           });
         });
       }
@@ -135,7 +132,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
           FirebaseFirestore.instance
               .collection("sellers")
               .doc(widget.sellerUID)
-              .update({ "3_threeStar" : int.parse(previousRating.toString()) + 1
+              .update({ "3_threeStar" : double.parse(previousRating.toString()) + 1
           });
         });
       }
@@ -152,7 +149,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
           FirebaseFirestore.instance
               .collection("sellers")
               .doc(widget.sellerUID)
-              .update({ "4_fourStar" : int.parse(previousRating.toString()) + 1
+              .update({ "4_fourStar" : double.parse(previousRating.toString()) + 1
           });
         });
       }
@@ -167,7 +164,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
           FirebaseFirestore.instance
               .collection("sellers")
               .doc(widget.sellerUID)
-              .update({ "5_fiveStar": int.parse(previousRating.toString()) + 1
+              .update({ "5_fiveStar": double.parse(previousRating.toString()) + 1
           });
         });
 
@@ -188,7 +185,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
       var four = snap.data()!["4_fourStar"].toString();
       var five = snap.data()!["5_fiveStar"].toString();
 
-      _totalRating = (5 * int.parse(five) + 4 * int.parse(four) + 3 * int.parse(three) + 2 * int.parse(two) + 1 * int.parse(one)) / (int.parse(five) + int.parse(four) + int.parse(three) + int.parse(two) + int.parse(one));
+      _totalRating = (5 * double.parse(five) + 4 * double.parse(four) + 3 * double.parse(three) + 2 * double.parse(two) + 1 * double.parse(one)) / (double.parse(five) + double.parse(four) + double.parse(three) + double.parse(two) + double.parse(one));
 
       // previousOverallRating = snap.data()!["rating"].toString();
 
@@ -340,25 +337,25 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                     ),
                   ),
                   const Divider(thickness: 4,),
-                  FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(sharedPreferences!.getString("uid"))
-                        .collection("userAddress")
-                        .doc(dataMap["addressID"])
-                        .get(),
-                    builder: (c, snapshot)
-                    {
-                      return snapshot.hasData
-                          ? ShipmentAddressDesign(
-                        model: Address.fromJson(
-                            snapshot.data!.data()! as Map<String, dynamic>
-                        ),
-                        orderStatus: orderStatus,
-                      )
-                          : Center(child: circularProgress(),);
-                    },
-                  ),
+                  // FutureBuilder<DocumentSnapshot>(
+                  //   future: FirebaseFirestore.instance
+                  //       .collection("users")
+                  //       .doc(sharedPreferences!.getString("uid"))
+                  //       .collection("userAddress")
+                  //       .doc(dataMap["addressID"])
+                  //       .get(),
+                  //   builder: (c, snapshot)
+                  //   {
+                  //     return snapshot.hasData
+                  //         ? ShipmentAddressDesign(
+                  //       model: Address.fromJson(
+                  //           snapshot.data!.data()! as Map<String, dynamic>
+                  //       ),
+                  //       orderStatus: orderStatus,
+                  //     )
+                  //         : Center(child: circularProgress(),);
+                  //   },
+                  // ),
 
                   Text("Rate: $_rating"),
 
@@ -402,7 +399,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                               child: GestureDetector(
                                 onTap: ()
                                 {
-                                  //getOrderTotalAmount();
+                                  getOrderTotalAmount();
                                   getOrderInfo();
                                   getRating();
                                   getOverallRating();
@@ -423,8 +420,11 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                           ),
                         ),
 
+                        SizedBox(height: 20,),
+
                         Container(
                           height: 500,
+                          width: MediaQuery.of(context).size.width - 40,
                           child: TextField(
                             style: TextStyle(
                               fontSize: 15,
@@ -434,7 +434,7 @@ class _OrderDetailsRateState extends State<OrderDetailsRate>
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.green, width: 2.0),
+                                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
                                 ),
                                 border: InputBorder.none,
                                 hintText: ("Add Comment(Optional)"),

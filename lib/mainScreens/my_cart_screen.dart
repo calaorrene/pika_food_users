@@ -200,8 +200,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
               icon: const Icon(Icons.clear_all),
               onPressed: ()
               {
-                clearCartNow2(context);
-
+                mycClearCartNow(context);
                 Navigator.pop(context);
 
                 Fluttertoast.showToast(msg: "Cart has been cleared.");

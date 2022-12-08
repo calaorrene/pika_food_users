@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pika_food_cutomer/mainScreens/order_details_history.dart';
 import 'package:pika_food_cutomer/models/items.dart';
+
+import '../mainScreens/order_details_rate.dart';
 
 class OrderCardHistory extends StatelessWidget
 {
@@ -8,12 +11,14 @@ class OrderCardHistory extends StatelessWidget
   final List<DocumentSnapshot>? data;
   final String? orderID;
   final List<String>? seperateQuantitiesList;
+  late String? sellerUID;
 
   OrderCardHistory({
     this.itemCount,
     this.data,
     this.orderID,
     this.seperateQuantitiesList,
+    this.sellerUID
   });
 
   @override
@@ -21,7 +26,7 @@ class OrderCardHistory extends StatelessWidget
     return InkWell(
       onTap: ()
       {
-        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (c)=> OrderDetailHistory(orderID: orderID, sellerUID: sellerUID)));
       },
       child: Container(
         decoration: const BoxDecoration(

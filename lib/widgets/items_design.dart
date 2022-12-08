@@ -116,18 +116,6 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
                   child: InkWell(
                     onTap: ()
                     {
-                      int itemCounter = int.parse(counterTextEditingController.text);
-
-                      List<String> separateItemIDsList = separateItemIDs();
-
-                      //1.check if item exist already in cart
-                      separateItemIDsList.contains(widget.model!.itemID)
-                          ? Fluttertoast.showToast(msg: "Item is already in Cart.")
-                          :
-                      //2.add to cart
-
-                      addItemToCart(widget.model!.itemID, context, itemCounter);
-
                       _newQuantity = widget.model!.quantity!.toInt() - int.parse(counterTextEditingController.text);
 
                       FirebaseFirestore.instance
@@ -139,6 +127,19 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
                       debugPrint("Quantity: " +  _newQuantity.toString());
 
                       addUserCart();
+
+
+                      int itemCounter = int.parse(counterTextEditingController.text);
+
+                      List<String> separateItemIDsList = separateItemIDs();
+
+                      //1.check if item exist already in cart
+                      separateItemIDsList.contains(widget.model!.itemID)
+                          ? Fluttertoast.showToast(msg: "Item is already in Cart.")
+                          :
+                      //2.add to cart
+
+                      addItemToCart(widget.model!.itemID, context, itemCounter);
 
                     },
                     child: Container(
@@ -188,8 +189,7 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
     });
   }
 
-  addUserCart()
-  {
+  addUserCart() {
     FirebaseFirestore.instance
         .collection("items")
         .doc(widget.model!.itemID)
@@ -206,7 +206,7 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
         "thumbnail": widget.model!.thumbnailUrl,
         "quantity": int.parse(counterTextEditingController.text),
         "price": widget.model!.price,
-        "totalAmount" :  widget.model!.price! * int.parse(counterTextEditingController.text),
+        "totalAmount" :  widget.model!.price! * double.parse(counterTextEditingController.text),
         "sellerName" : _sellerName,
         "addedTime" : FieldValue.serverTimestamp()
       }).whenComplete((){
@@ -217,8 +217,7 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
     });
   }
 
-  Future writeUserCart(Map<String, dynamic> data) async
-  {
+  Future writeUserCart(Map<String, dynamic> data) async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(sharedPreferences!.getString("uid"))
@@ -230,7 +229,6 @@ class _ItemsDesignWidgetState extends State<ItemsDesignWidget>
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
